@@ -89,14 +89,14 @@ class SignupViewController: UIViewController,UIScrollViewDelegate,UITextFieldDel
     //display alert
     func displayAlert(title: String, message: String, enterMoreInfo: Bool) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
-        alert.addAction(UIAlertAction(title: title, style: UIAlertActionStyle.Default, handler: nil))
-        var title = "OK"
+        var title = "Ok"
         if enterMoreInfo == true {
             title = "Cancel"
             alert.addAction(UIAlertAction(title: "Continue", style: UIAlertActionStyle.Default, handler: { (action) in
                 self.postDataToURL()
             }))
         }
+        alert.addAction(UIAlertAction(title: title, style: UIAlertActionStyle.Default, handler: nil))
         self.presentViewController(alert, animated: true, completion: nil)
     }
     
@@ -129,18 +129,28 @@ class SignupViewController: UIViewController,UIScrollViewDelegate,UITextFieldDel
             }
             
             // Read the JSON
-            if let postString = NSString(data:data!, encoding: NSUTF8StringEncoding) as? String {
-                // Print what we got from the call
-                print("POST: " + postString)
-                
-                
+            do{
+                guard let jsonResponse = try NSJSONSerialization.JSONObjectWithData(data!, options: []) as? [String: AnyObject] else{
+                    print("Error reading JSON data")
+                    return
+                }
+                if jsonResponse["response-code"]! as! String == "010" {
+                    dispatch_async(dispatch_get_main_queue()) {
+                        self.performSegueWithIdentifier("signupToHome", sender: self)
+                    }
+                }else{
+                    dispatch_async(dispatch_get_main_queue()) {
+                        self.displayAlert("Unable to register", message: jsonResponse["response-message"]! as! String, enterMoreInfo: false)
+                    }
+                }
+            }catch  {
+                print("error trying to convert data to JSON")
+                return
             }
-            dispatch_async(dispatch_get_main_queue()) {
-                self.performSegueWithIdentifier("signupToHome", sender: self)
-//                self.dismissViewControllerAnimated(true, completion: nil)
-            }
-
-
+//            if let postString = NSString(data:data!, encoding: NSUTF8StringEncoding) as? String {
+//                // Print what we got from the call
+//                print("POST: " + postString)
+//            }
         }.resume()
     }
     
