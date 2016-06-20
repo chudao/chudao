@@ -25,7 +25,6 @@ class SignupViewController: UIViewController,UIScrollViewDelegate,UITextFieldDel
         
     }
     @IBAction func signup(sender: AnyObject) {
-        print("signUp button")
         if username.text == "" || email.text == "" || password.text == "" || password.text == "" {
             displayAlert("Field(s) are reqired", message: "Please fill in all the account information", enterMoreInfo: false)
         }else if email.text != confirmEmail.text {
@@ -33,7 +32,10 @@ class SignupViewController: UIViewController,UIScrollViewDelegate,UITextFieldDel
         }else if password.text != confirmPassword.text {
             displayAlert("Password mismatch", message: "Please re-enter your password", enterMoreInfo: false)
         }else{
-            displayAlert("Complete info will improve your experience", message: "Stylist could better recommend for you if you provide more information.  Do you still want to continue?", enterMoreInfo: true)
+            dispatch_async(dispatch_get_main_queue()) {
+                self.displayAlert("Complete info will improve your experience", message: "Stylist could better recommend for you if you provide more information.  Do you still want to continue?", enterMoreInfo: true)
+            }
+            
         }
     }
     @IBOutlet var scrollView: UIScrollView!
@@ -87,22 +89,21 @@ class SignupViewController: UIViewController,UIScrollViewDelegate,UITextFieldDel
     //display alert
     func displayAlert(title: String, message: String, enterMoreInfo: Bool) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
+        alert.addAction(UIAlertAction(title: title, style: UIAlertActionStyle.Default, handler: nil))
         var title = "OK"
         if enterMoreInfo == true {
             title = "Cancel"
             alert.addAction(UIAlertAction(title: "Continue", style: UIAlertActionStyle.Default, handler: { (action) in
-                print("data posted")
                 self.postDataToURL()
             }))
         }
-        alert.addAction(UIAlertAction(title: title, style: UIAlertActionStyle.Default, handler: nil))
         self.presentViewController(alert, animated: true, completion: nil)
     }
     
     
     func postDataToURL() {
         // Setup the session to make REST POST call
-        let postEndpoint: String = "http://localhost:7002/auth/register"
+        let postEndpoint: String = "http://chudao.herokuapp.com/auth/register"
         let url = NSURL(string: postEndpoint)!
         let session = NSURLSession.sharedSession()
         let postParams : [String: String] = ["username": self.username.text!, "password": self.password.text!]
@@ -131,10 +132,21 @@ class SignupViewController: UIViewController,UIScrollViewDelegate,UITextFieldDel
             if let postString = NSString(data:data!, encoding: NSUTF8StringEncoding) as? String {
                 // Print what we got from the call
                 print("POST: " + postString)
-                self.performSegueWithIdentifier("signupToHome", sender: self)
+                
+                
             }
+            dispatch_async(dispatch_get_main_queue()) {
+                self.performSegueWithIdentifier("signupToHome", sender: self)
+//                self.dismissViewControllerAnimated(true, completion: nil)
+            }
+
+
         }.resume()
     }
+    
+
+    
+    
 
     
     /*
