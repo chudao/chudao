@@ -8,10 +8,42 @@
 
 import UIKit
 
-class SignupViewController: UIViewController,UIScrollViewDelegate,UITextFieldDelegate {
+class SignupViewController: UIViewController,UIScrollViewDelegate,UITextFieldDelegate,UINavigationControllerDelegate, UIImagePickerControllerDelegate {
 
+    @IBOutlet var image: UIImageView!
     @IBOutlet var isUserButton: CheckBox!
     @IBOutlet var isStylistButton: CheckBox!
+
+    
+    
+    @IBAction func chooseExistingPhoto(sender: AnyObject) {
+        if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.PhotoLibrary) {
+            let imagePicker = UIImagePickerController()
+            imagePicker.delegate = self
+            imagePicker.sourceType = UIImagePickerControllerSourceType.PhotoLibrary;
+            imagePicker.allowsEditing = true
+            self.presentViewController(imagePicker, animated: true, completion: nil)
+        }
+    }
+    
+    
+    @IBAction func takeNewPhoto(sender: AnyObject) {
+        if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera) {
+            let imagePicker = UIImagePickerController()
+            imagePicker.delegate = self
+            imagePicker.sourceType = UIImagePickerControllerSourceType.Camera;
+            imagePicker.allowsEditing = false
+            self.presentViewController(imagePicker, animated: true, completion: nil)
+        }
+        else{
+            let alert = UIAlertController(title: "Camera Not Found", message: "This device has no Camera", preferredStyle: .Alert)
+            let ok = UIAlertAction(title: "OK", style:.Default, handler: nil)
+            alert.addAction(ok)
+            presentViewController(alert, animated: true, completion: nil)
+        }
+    }
+    
+    
     @IBAction func isUser(sender: AnyObject) {
         if isUserButton.isChecked == true {
             age.hidden = true
@@ -48,6 +80,8 @@ class SignupViewController: UIViewController,UIScrollViewDelegate,UITextFieldDel
     @IBOutlet var confirmPassword: UITextField!
     
     var readyToSignup: Bool = false
+    var activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView()
+    var userId: Int = -1
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -65,8 +99,17 @@ class SignupViewController: UIViewController,UIScrollViewDelegate,UITextFieldDel
         password.delegate=self
         confirmPassword.delegate=self
         
+        //gesture to dismiss keyboard
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ViewController.dismissKeyboard))
+        view.addGestureRecognizer(tap)
         
-        
+        //activity indicator
+        activityIndicator = UIActivityIndicatorView(frame: self.view.bounds)
+        activityIndicator.backgroundColor = UIColor(white: 1.0, alpha: 0.5)
+        activityIndicator.center = self.view.center
+        activityIndicator.hidesWhenStopped = true
+        activityIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.Gray
+        view.addSubview(activityIndicator)
     }
 
     override func didReceiveMemoryWarning() {
@@ -86,6 +129,7 @@ class SignupViewController: UIViewController,UIScrollViewDelegate,UITextFieldDel
         return true
     }
     
+    
     //display alert
     func displayAlert(title: String, message: String, enterMoreInfo: Bool) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
@@ -93,7 +137,7 @@ class SignupViewController: UIViewController,UIScrollViewDelegate,UITextFieldDel
         if enterMoreInfo == true {
             title = "Cancel"
             alert.addAction(UIAlertAction(title: "Continue", style: UIAlertActionStyle.Default, handler: { (action) in
-                self.postDataToURL()
+                self.register()
             }))
         }
         alert.addAction(UIAlertAction(title: title, style: UIAlertActionStyle.Default, handler: nil))
@@ -101,7 +145,22 @@ class SignupViewController: UIViewController,UIScrollViewDelegate,UITextFieldDel
     }
     
     
-    func postDataToURL() {
+    func imagePickerControllerDidCancel(picker: UIImagePickerController) {
+        dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    func imagePickerController(picker: UIImagePickerController, didFinishPickingImage image: UIImage!, editingInfo: [NSObject : AnyObject]!) {
+        self.image.image = image
+        self.image.clipsToBounds = true
+        self.image.contentMode = UIViewContentMode.ScaleAspectFit
+        self.dismissViewControllerAnimated(true, completion: nil);
+    }
+    
+    func register() {
+        //activate activity indicator and disable user interaction
+        activityIndicator.startAnimating()
+        UIApplication.sharedApplication().beginIgnoringInteractionEvents()
+        
         // Setup the session to make REST POST call
         let postEndpoint: String = "http://chudao.herokuapp.com/auth/register"
         let url = NSURL(string: postEndpoint)!
@@ -116,11 +175,15 @@ class SignupViewController: UIViewController,UIScrollViewDelegate,UITextFieldDel
             request.HTTPBody = try NSJSONSerialization.dataWithJSONObject(postParams, options: NSJSONWritingOptions())
             print(postParams)
         } catch {
-            print("bad things happened")
+            print("Error")
         }
         
         // Make the POST call and handle it in a completion handler
         session.dataTaskWithRequest(request) { (data: NSData?, response: NSURLResponse?, error: NSError?) in
+            //disable activiy indicator and re-activate user interaction
+            self.activityIndicator.stopAnimating()
+            UIApplication.sharedApplication().endIgnoringInteractionEvents()
+            
             // Make sure we get an OK response
             guard let realResponse = response as? NSHTTPURLResponse where
                 realResponse.statusCode == 200 else {
@@ -129,6 +192,133 @@ class SignupViewController: UIViewController,UIScrollViewDelegate,UITextFieldDel
             }
             
             // Read the JSON
+            do{
+                guard let jsonResponse = try NSJSONSerialization.JSONObjectWithData(data!, options: []) as? [String: AnyObject] else{
+                    print("Error reading JSON data")
+                    return
+                }
+                print(jsonResponse)
+                if jsonResponse["response-code"]! as! String == "010" {
+                    self.userId = jsonResponse["user-id"]! as! Int
+                    self.uploadImage()
+                    dispatch_async(dispatch_get_main_queue()) {
+                        self.performSegueWithIdentifier("signupToHome", sender: self)
+                    }
+                }else{
+                    dispatch_async(dispatch_get_main_queue()) {
+                        self.displayAlert("Unable to register", message: jsonResponse["response-message"]! as! String, enterMoreInfo: false)
+                    }
+                }
+            }catch  {
+                print("error trying to convert data to JSON")
+                return
+            }
+        }.resume()
+    }
+    
+
+    func uploadImage()
+    {
+        let url = NSURL(string: "http://chudao.herokuapp.com/binary/upload")
+        
+        let request = NSMutableURLRequest(URL: url!)
+        request.HTTPMethod = "POST"
+        
+        let boundary = generateBoundaryString()
+        
+        //define the multipart request type
+        request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
+        
+        if (image.image == nil)
+        {
+            print("image is nil")
+            return
+        }
+        
+        let image_data = UIImagePNGRepresentation(image.image!)
+        
+        if(image_data == nil)
+        {
+            print("image png representation is nil")
+            return
+        }
+        
+        
+        let body = NSMutableData()
+        
+        let fname = "\(username.text!).png"
+        
+        let mimetype = "image/png"
+        
+        
+        //define the data post parameter
+//        body.appendData("--\(boundary)--\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
+//        body.appendData("Content-Disposition:form-data; name=\"product-name\"\r\n\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
+//        body.appendData("profilePic\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
+//        
+////        body.appendData("--\(boundary)--\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
+////        body.appendData("Content-Disposition:form-data; name=\"product-category\"\r\n\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
+////        body.appendData("profilePic\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
+//        
+//        body.appendData("--\(boundary)--\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
+//        body.appendData("Content-Disposition:form-data; name=\"product-description\"\r\n\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
+//        body.appendData("profilePic\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
+//        
+//        body.appendData("--\(boundary)--\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
+//        body.appendData("Content-Disposition:form-data; name=\"product-tags\"\r\n\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
+//        body.appendData("profilePic\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
+//        
+//        body.appendData("--\(boundary)--\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
+//        body.appendData("Content-Disposition:form-data; name=\"product-link\"\r\n\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
+//        body.appendData("profilePic\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
+//        
+//        body.appendData("--\(boundary)--\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
+//        body.appendData("Content-Disposition:form-data; name=\"product-brand\"\r\n\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
+//        body.appendData("profilePic\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
+//        
+//        body.appendData("--\(boundary)--\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
+//        body.appendData("Content-Disposition:form-data; name=\"brand-link\"\r\n\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
+//        body.appendData("profilePic\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
+//        
+//        body.appendData("--\(boundary)--\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
+//        body.appendData("Content-Disposition:form-data; name=\"submit\"\r\n\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
+//        body.appendData("submit\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
+        
+        body.appendData("--\(boundary)\r\n".dataUsingEncoding(NSUTF8StringEncoding,allowLossyConversion: true)!)
+        body.appendData("Content-Disposition:form-data; name=\"user-id\"\r\n\r\n\(self.userId)\r\n".dataUsingEncoding(NSUTF8StringEncoding,allowLossyConversion: true)!)
+        
+        body.appendData("--\(boundary)\r\n".dataUsingEncoding(NSUTF8StringEncoding,allowLossyConversion: true)!)
+        body.appendData("Content-Disposition:form-data; name=\"product-id\"\r\n\r\n1\r\n".dataUsingEncoding(NSUTF8StringEncoding,allowLossyConversion: true)!)
+        
+        body.appendData("--\(boundary)\r\n".dataUsingEncoding(NSUTF8StringEncoding,allowLossyConversion: true)!)
+        body.appendData("Content-Disposition:form-data; name=\"file\"; filename=\"\(fname)\"\r\n".dataUsingEncoding(NSUTF8StringEncoding,allowLossyConversion: true)!)
+        body.appendData("Content-Type: \(mimetype)\r\n\r\n".dataUsingEncoding(NSUTF8StringEncoding,allowLossyConversion: true)!)
+        
+        body.appendData(image_data!)
+        body.appendData("\r\n".dataUsingEncoding(NSUTF8StringEncoding,allowLossyConversion: true)!)
+        
+        body.appendData("--\(boundary)\r\n".dataUsingEncoding(NSUTF8StringEncoding,allowLossyConversion: true)!)
+        body.appendData("Content-Disposition:form-data; name=\"submit\"\r\n\r\n".dataUsingEncoding(NSUTF8StringEncoding,allowLossyConversion: true)!)
+        body.appendData("submit\r\n".dataUsingEncoding(NSUTF8StringEncoding,allowLossyConversion: true)!)
+        
+        body.appendData("--\(boundary)--\r\n".dataUsingEncoding(NSUTF8StringEncoding,allowLossyConversion: true)!)
+        
+        request.HTTPBody = body
+        
+        let session = NSURLSession.sharedSession()
+        
+        let task = session.dataTaskWithRequest(request) {
+            (
+            let data, let response, let error) in
+            
+            guard let _:NSData = data, let _:NSURLResponse = response  where error == nil else {
+                print("error: \(error!)")
+                return
+            }
+            
+            let dataString = NSString(data: data!, encoding: NSUTF8StringEncoding)
+            print("Response: \(dataString!)")
+            
             do{
                 guard let jsonResponse = try NSJSONSerialization.JSONObjectWithData(data!, options: []) as? [String: AnyObject] else{
                     print("Error reading JSON data")
@@ -147,15 +337,16 @@ class SignupViewController: UIViewController,UIScrollViewDelegate,UITextFieldDel
                 print("error trying to convert data to JSON")
                 return
             }
-//            if let postString = NSString(data:data!, encoding: NSUTF8StringEncoding) as? String {
-//                // Print what we got from the call
-//                print("POST: " + postString)
-//            }
-        }.resume()
+
+        }
+        task.resume()
     }
     
-
     
+    func generateBoundaryString() -> String
+    {
+        return "Boundary-\(NSUUID().UUIDString)"
+    }
     
 
     
@@ -168,5 +359,4 @@ class SignupViewController: UIViewController,UIScrollViewDelegate,UITextFieldDel
         // Pass the selected object to the new view controller.
     }
     */
-
 }

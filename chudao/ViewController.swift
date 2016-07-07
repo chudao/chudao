@@ -10,6 +10,7 @@ import UIKit
 
 class ViewController: UIViewController,UITextFieldDelegate {
 
+    var activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView()
     @IBOutlet var username: UITextField!
     @IBOutlet var password: UITextField!
     @IBAction func loginButton(sender: AnyObject) {
@@ -25,9 +26,18 @@ class ViewController: UIViewController,UITextFieldDelegate {
         super.viewDidLoad()
         username.delegate=self
         password.delegate=self
+        
+        //gesture to dismiss keyboard
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ViewController.dismissKeyboard))
         view.addGestureRecognizer(tap)
         
+        //activity indicator
+        activityIndicator = UIActivityIndicatorView(frame: self.view.bounds)
+        activityIndicator.backgroundColor = UIColor(white: 1.0, alpha: 0.5)
+        activityIndicator.center = self.view.center
+        activityIndicator.hidesWhenStopped = true
+        activityIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.Gray
+        view.addSubview(activityIndicator)
     }
 
     override func didReceiveMemoryWarning() {
@@ -55,6 +65,10 @@ class ViewController: UIViewController,UITextFieldDelegate {
     }
     
     func postDataToURL() {
+        //activate activity indicator and disable user interaction
+        activityIndicator.startAnimating()
+        UIApplication.sharedApplication().beginIgnoringInteractionEvents()
+        
         // Setup the session to make REST POST call
         let postEndpoint: String = "http://chudao.herokuapp.com/auth/login"
         let url = NSURL(string: postEndpoint)!
@@ -74,17 +88,20 @@ class ViewController: UIViewController,UITextFieldDelegate {
         
         // Make the POST call and handle it in a completion handler
         session.dataTaskWithRequest(request) { (data: NSData?, response: NSURLResponse?, error: NSError?) in
+            //disable activiy indicator and re-activate user interaction
+            self.activityIndicator.stopAnimating()
+            UIApplication.sharedApplication().endIgnoringInteractionEvents()
+
             // Make sure we get an OK response
             guard let realResponse = response as? NSHTTPURLResponse where
                 realResponse.statusCode == 200 else {
                     print("Not a 200 response")
                     return
             }
-            
-                        if let postString = NSString(data:data!, encoding: NSUTF8StringEncoding) as? String {
-                            // Print what we got from the call
-                            print("POST: " + postString)
-                        }
+            if let postString = NSString(data:data!, encoding: NSUTF8StringEncoding) as? String {
+                    // Print what we got from the call
+                    print("Response: " + postString)
+            }
             
             // Read the JSON
             do{
@@ -92,7 +109,6 @@ class ViewController: UIViewController,UITextFieldDelegate {
                     print("Error reading JSON data")
                     return
                 }
-
                 if jsonResponse["response-code"]! as! String == "000" {
                     dispatch_async(dispatch_get_main_queue()) {
                         self.performSegueWithIdentifier("loginToHome", sender: self)
