@@ -202,7 +202,7 @@ class SignupViewController: UIViewController,UIScrollViewDelegate,UITextFieldDel
                     self.userId = jsonResponse["user-id"]! as! Int
                     self.uploadImage()
                     dispatch_async(dispatch_get_main_queue()) {
-                        self.performSegueWithIdentifier("signupToHome", sender: self)
+                        self.performSegueWithIdentifier("signupToHome", sender: self.userId)
                     }
                 }else{
                     dispatch_async(dispatch_get_main_queue()) {
@@ -326,7 +326,7 @@ class SignupViewController: UIViewController,UIScrollViewDelegate,UITextFieldDel
                 }
                 if jsonResponse["response-code"]! as! String == "010" {
                     dispatch_async(dispatch_get_main_queue()) {
-                        self.performSegueWithIdentifier("signupToHome", sender: self)
+                        print("Image uploaded: \(jsonResponse)")
                     }
                 }else{
                     dispatch_async(dispatch_get_main_queue()) {
@@ -348,7 +348,12 @@ class SignupViewController: UIViewController,UIScrollViewDelegate,UITextFieldDel
         return "Boundary-\(NSUUID().UUIDString)"
     }
     
-
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "signupToHome" {
+            let destinationViewController = segue.destinationViewController as! HomeViewController
+            destinationViewController.userId = sender as! Int
+        }
+    }
     
     /*
     // MARK: - Navigation

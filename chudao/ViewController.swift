@@ -111,7 +111,8 @@ class ViewController: UIViewController,UITextFieldDelegate {
                 }
                 if jsonResponse["response-code"]! as! String == "000" {
                     dispatch_async(dispatch_get_main_queue()) {
-                        self.performSegueWithIdentifier("loginToHome", sender: self)
+                        let userId = jsonResponse["user-id"]! as! Int
+                        self.performSegueWithIdentifier("loginToHome", sender: userId)
                     }
                 }else{
                     dispatch_async(dispatch_get_main_queue()) {
@@ -125,5 +126,12 @@ class ViewController: UIViewController,UITextFieldDelegate {
         }.resume()
     }
 
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "loginToHome" {
+            let destinationViewController = segue.destinationViewController as! HomeViewController
+            destinationViewController.userId = sender as! Int
+        }
+    }
 }
 
