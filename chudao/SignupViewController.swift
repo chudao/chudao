@@ -67,7 +67,6 @@ class SignupViewController: UIViewController,UIScrollViewDelegate,UITextFieldDel
             dispatch_async(dispatch_get_main_queue()) {
                 self.displayAlert("Complete info will improve your experience", message: "Stylist could better recommend for you if you provide more information.  Do you still want to continue?", enterMoreInfo: true)
             }
-            
         }
     }
     @IBOutlet var scrollView: UIScrollView!
@@ -350,8 +349,9 @@ class SignupViewController: UIViewController,UIScrollViewDelegate,UITextFieldDel
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "signupToHome" {
-            let destinationViewController = segue.destinationViewController as! HomeViewController
-            destinationViewController.userId = sender as! Int
+            let destinationViewController = segue.destinationViewController as! UITabBarController
+            let destinationTab = destinationViewController.viewControllers?.first as! HomeViewController
+            destinationTab.userId = sender as! Int
         }
     }
     

@@ -129,8 +129,9 @@ class ViewController: UIViewController,UITextFieldDelegate {
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "loginToHome" {
-            let destinationViewController = segue.destinationViewController as! HomeViewController
-            destinationViewController.userId = sender as! Int
+            let destinationViewController = segue.destinationViewController as! UITabBarController
+            let destinationTab = destinationViewController.viewControllers?.first as! HomeViewController
+            destinationTab.userId = sender as! Int
         }
     }
 }
