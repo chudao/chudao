@@ -224,7 +224,7 @@ class NewRequestViewController: UIViewController,UINavigationControllerDelegate,
         
         let body = NSMutableData()
         
-        let fname = "User\(userId)Request\(Int(arc4random_uniform(6) + 1)).png"
+        let fname = "User\(userId)Request\(Int(arc4random_uniform(100) + 1)).png"
         
         let mimetype = "image/png"
         

@@ -12,13 +12,26 @@ class HomeViewController: UIViewController {
     
     var userId: Int = -1
 
+    @IBOutlet var searchRequirment: UISearchBar!
+    @IBAction func search(sender: AnyObject) {
+        if searchRequirment.text != nil && searchRequirment.text != ""{
+            let data = [String(userId), searchRequirment.text!]
+            performSegueWithIdentifier("homeToSearchResult", sender: data)
+        }else{
+            displayAlert("Invalid search", message: "Please enter a valid input", enterMoreInfo: false)
+        }
+    }
     @IBAction func newRequest(sender: AnyObject) {
         performSegueWithIdentifier("homeToNewRequest", sender: userId)
     }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         print("homepage currentUser: \(userId)")
-        // Do any additional setup after loading the view.
+        
+        //gesture to dismiss keyboard
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ViewController.dismissKeyboard))
+        view.addGestureRecognizer(tap)
     }
 
     override func didReceiveMemoryWarning() {
@@ -26,21 +39,43 @@ class HomeViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    //dismiss keyboard by clicking anywhere else
+    func dismissKeyboard() {
+        view.endEditing(true)
     }
-    */
+    
+    //dimiss keyboard by pressing return key
+    func textFieldShouldReturn(textField: UITextField) -> Bool
+    {
+        textField.resignFirstResponder()
+        return true
+    }
+    
+    //display alert
+    func displayAlert(title: String, message: String, enterMoreInfo: Bool) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
+        var title = "Ok"
+        if enterMoreInfo == true {
+            title = "Cancel"
+            alert.addAction(UIAlertAction(title: "Continue", style: UIAlertActionStyle.Default, handler: { (action) in
+                
+            }))
+        }
+        alert.addAction(UIAlertAction(title: title, style: UIAlertActionStyle.Default, handler: nil))
+        self.presentViewController(alert, animated: true, completion: nil)
+    }
+
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "homeToNewRequest" {
             let destinationViewController = segue.destinationViewController as! NewRequestViewController
             destinationViewController.userId = sender as! Int
+        }
+        if segue.identifier == "homeToSearchResult"{
+            let destinationViewController = segue.destinationViewController as! UINavigationController
+            let productSearchReultController = destinationViewController.topViewController as! ProductSearchResultTableViewController
+            productSearchReultController.userId = Int(sender![0] as! String)!
+            productSearchReultController.searchRequirement = sender![1] as! String
         }
     }
 
