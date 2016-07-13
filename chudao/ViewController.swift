@@ -11,6 +11,9 @@ import UIKit
 class ViewController: UIViewController,UITextFieldDelegate {
 
     var activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView()
+    var identity: String = "undefined"
+    var authToken: String = "undefined"
+    
     @IBOutlet var username: UITextField!
     @IBOutlet var password: UITextField!
     @IBAction func loginButton(sender: AnyObject) {
@@ -73,7 +76,7 @@ class ViewController: UIViewController,UITextFieldDelegate {
         let postEndpoint: String = "http://chudao.herokuapp.com/auth/login"
         let url = NSURL(string: postEndpoint)!
         let session = NSURLSession.sharedSession()
-        let postParams : [String: String] = ["username": self.username.text!, "password": self.password.text!]
+        let postParams : [String: String] = ["user-name": self.username.text!, "password": self.password.text!]
         
         // Create the request
         let request = NSMutableURLRequest(URL: url)
@@ -95,9 +98,13 @@ class ViewController: UIViewController,UITextFieldDelegate {
             // Make sure we get an OK response
             guard let realResponse = response as? NSHTTPURLResponse where
                 realResponse.statusCode == 200 else {
-                    print("Not a 200 response")
+                    print("Not a 200 response, code: \((response as? NSHTTPURLResponse)?.statusCode)")
                     return
             }
+            self.authToken = ((response as? NSHTTPURLResponse)?.allHeaderFields["X-Auth-Token"] as? String)!
+            print("Tokne \(self.authToken)")
+            
+            
             if let postString = NSString(data:data!, encoding: NSUTF8StringEncoding) as? String {
                     // Print what we got from the call
                     print("Response: " + postString)
@@ -112,6 +119,7 @@ class ViewController: UIViewController,UITextFieldDelegate {
                 if jsonResponse["response-code"]! as! String == "000" {
                     dispatch_async(dispatch_get_main_queue()) {
                         let userId = jsonResponse["user-id"]! as! Int
+                        self.identity = jsonResponse["user-category"] as! String
                         self.performSegueWithIdentifier("loginToHome", sender: userId)
                     }
                 }else{
@@ -132,6 +140,8 @@ class ViewController: UIViewController,UITextFieldDelegate {
             let destinationViewController = segue.destinationViewController as! UITabBarController
             let destinationTab = destinationViewController.viewControllers?.first as! HomeViewController
             destinationTab.userId = sender as! Int
+            destinationTab.identity = self.identity
+            destinationTab.authToken = self.authToken
         }
     }
 }

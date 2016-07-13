@@ -14,6 +14,12 @@ class ProductSearchResultTableViewController: UITableViewController {
     var activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView()
     var searchRequirement: String = ""
     var productDetail: [[String:AnyObject]] = []
+    var authToken: String = "undefined"
+    var identity: String = "undefined"
+    
+    @IBAction func cancel(sender: AnyObject) {
+        performSegueWithIdentifier("searchResultToHome", sender:self)
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,10 +36,10 @@ class ProductSearchResultTableViewController: UITableViewController {
         activityIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.Gray
         view.addSubview(activityIndicator)
         
-        let preparedSearchRequirement = searchRequirement.componentsSeparatedByString(" ").joinWithSeparator(",")
-        
-        queryByTag(preparedSearchRequirement)
-        
+        if searchRequirement != ""{
+            let preparedSearchRequirement = searchRequirement.componentsSeparatedByString(" ").joinWithSeparator(",")
+            queryByTag(preparedSearchRequirement)
+        }
 
         
         // Uncomment the following line to preserve selection between presentations
@@ -55,20 +61,12 @@ class ProductSearchResultTableViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        print("rows \(productDetail.count)")
         return productDetail.count
     }
     
     //display alert
-    func displayAlert(title: String, message: String, enterMoreInfo: Bool) {
+    func displayAlert(title: String, message: String) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
-        var title = "Ok"
-        if enterMoreInfo == true {
-            title = "Cancel"
-            alert.addAction(UIAlertAction(title: "Continue", style: UIAlertActionStyle.Default, handler: { (action) in
-                
-            }))
-        }
         alert.addAction(UIAlertAction(title: title, style: UIAlertActionStyle.Default, handler: nil))
         self.presentViewController(alert, animated: true, completion: nil)
     }
@@ -89,6 +87,8 @@ class ProductSearchResultTableViewController: UITableViewController {
         let request = NSMutableURLRequest(URL: url)
         request.HTTPMethod = "POST"
         request.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-Type")
+        request.setValue(self.authToken, forHTTPHeaderField: "X-Auth-Token")
+        
         do {
             request.HTTPBody = try NSJSONSerialization.dataWithJSONObject(postParams, options: NSJSONWritingOptions())
             print("Request: \(postParams)")
@@ -105,7 +105,7 @@ class ProductSearchResultTableViewController: UITableViewController {
             // Make sure we get an OK response
             guard let realResponse = response as? NSHTTPURLResponse where
                 realResponse.statusCode == 200 else {
-                    print("Not a 200 response")
+                    print("Not a 200 response, code: \((response as? NSHTTPURLResponse)?.statusCode)")
                     return
             }
             
@@ -118,10 +118,16 @@ class ProductSearchResultTableViewController: UITableViewController {
                 print(jsonResponse)
                 if jsonResponse["response-code"]! as! String == "040" {
                     let productIds = jsonResponse["response-data"] as? NSDictionary
-                    self.queryByID(productIds!["ProductIds"]!.componentsJoinedByString(","))
+                    if productIds?.count > 0 {
+                        self.queryByID(productIds!["ProductIds"]!.componentsJoinedByString(","))
+                    }else{
+                        dispatch_async(dispatch_get_main_queue()) {
+                            self.displayAlert("No results matched", message: "Oops, please try something else")
+                        }
+                    }
                 }else{
                     dispatch_async(dispatch_get_main_queue()) {
-                        self.displayAlert("Unable to query", message: jsonResponse["response-message"]! as! String, enterMoreInfo: false)
+                        self.displayAlert("Unable to query", message: jsonResponse["response-message"]! as! String)
                     }
                 }
             }catch  {
@@ -147,6 +153,8 @@ class ProductSearchResultTableViewController: UITableViewController {
         let request = NSMutableURLRequest(URL: url)
         request.HTTPMethod = "POST"
         request.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-Type")
+        request.setValue(self.authToken, forHTTPHeaderField: "X-Auth-Token")
+        
         do {
             request.HTTPBody = try NSJSONSerialization.dataWithJSONObject(postParams, options: NSJSONWritingOptions())
             print("Request: \(postParams)")
@@ -182,7 +190,7 @@ class ProductSearchResultTableViewController: UITableViewController {
                     }
                 }else{
                     dispatch_async(dispatch_get_main_queue()) {
-                        self.displayAlert("Unable to query", message: jsonResponse["response-message"]! as! String, enterMoreInfo: false)
+                        self.displayAlert("Unable to query", message: jsonResponse["response-message"]! as! String)
                     }
                 }
             }catch  {
@@ -215,6 +223,16 @@ class ProductSearchResultTableViewController: UITableViewController {
             destinationViewController.productDescription = sender![2] as! String
             destinationViewController.productLink = sender![3] as! String
             destinationViewController.productId = sender![4] as! String
+            destinationViewController.identity = self.identity
+            destinationViewController.authToken = self.authToken
+        }
+        
+        if segue.identifier == "searchResultToHome" {
+            let destinationViewController = segue.destinationViewController as! UITabBarController
+            let destinationTab = destinationViewController.viewControllers?.first as! HomeViewController
+            destinationTab.userId = self.userId
+            destinationTab.identity = self.identity
+            destinationTab.authToken = self.authToken
         }
     }
     

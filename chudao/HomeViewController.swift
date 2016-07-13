@@ -11,7 +11,9 @@ import UIKit
 class HomeViewController: UIViewController {
     
     var userId: Int = -1
-
+    var identity: String = "undefined"
+    var authToken: String = "undefined"
+    
     @IBOutlet var searchRequirment: UISearchBar!
     @IBAction func search(sender: AnyObject) {
         if searchRequirment.text != nil && searchRequirment.text != ""{
@@ -28,6 +30,7 @@ class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         print("homepage currentUser: \(userId)")
+        print("homepage identity: \(identity)")
         
         //gesture to dismiss keyboard
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ViewController.dismissKeyboard))
@@ -70,12 +73,16 @@ class HomeViewController: UIViewController {
         if segue.identifier == "homeToNewRequest" {
             let destinationViewController = segue.destinationViewController as! NewRequestViewController
             destinationViewController.userId = sender as! Int
+            destinationViewController.authToken = self.authToken
+            destinationViewController.identity = self.identity
         }
         if segue.identifier == "homeToSearchResult"{
             let destinationViewController = segue.destinationViewController as! UINavigationController
             let productSearchReultController = destinationViewController.topViewController as! ProductSearchResultTableViewController
             productSearchReultController.userId = Int(sender![0] as! String)!
             productSearchReultController.searchRequirement = sender![1] as! String
+            productSearchReultController.authToken = self.authToken
+            productSearchReultController.identity = self.identity
         }
     }
 

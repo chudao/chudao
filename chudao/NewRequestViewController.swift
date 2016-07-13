@@ -11,8 +11,10 @@ import UIKit
 class NewRequestViewController: UIViewController,UINavigationControllerDelegate, UIImagePickerControllerDelegate {
 
     var userId: Int = -1
+    var identity: String = "undefined"
     var activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView()
     var fileKey: String = ""
+    var authToken: String = "undefined"
     
     @IBOutlet var cancelButton: UIBarButtonItem!
     @IBAction func cancelRequest(sender: AnyObject) {
@@ -148,6 +150,7 @@ class NewRequestViewController: UIViewController,UINavigationControllerDelegate,
         let request = NSMutableURLRequest(URL: url)
         request.HTTPMethod = "POST"
         request.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-Type")
+        request.setValue(self.authToken, forHTTPHeaderField: "X-Auth-Token")
         do {
             request.HTTPBody = try NSJSONSerialization.dataWithJSONObject(postParams, options: NSJSONWritingOptions())
             print(postParams)
@@ -164,7 +167,7 @@ class NewRequestViewController: UIViewController,UINavigationControllerDelegate,
             // Make sure we get an OK response
             guard let realResponse = response as? NSHTTPURLResponse where
                 realResponse.statusCode == 200 else {
-                    print("Not a 200 response")
+                    print("Not a 200 response, code: \((response as? NSHTTPURLResponse)?.statusCode)")
                     return
             }
             
@@ -208,6 +211,7 @@ class NewRequestViewController: UIViewController,UINavigationControllerDelegate,
         
         //define the multipart request type
         request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
+        request.setValue(self.authToken, forHTTPHeaderField: "X-Auth-Token")
         
         if attachment.image == nil {
             print("image is nil")
@@ -305,6 +309,8 @@ class NewRequestViewController: UIViewController,UINavigationControllerDelegate,
             let destinationViewController = segue.destinationViewController as! UITabBarController
             let destinationTab = destinationViewController.viewControllers?.first as! HomeViewController
             destinationTab.userId = sender as! Int
+            destinationTab.identity = self.identity
+            destinationTab.authToken = self.authToken
         }
     }
 

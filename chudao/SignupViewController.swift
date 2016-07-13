@@ -54,8 +54,9 @@ class SignupViewController: UIViewController,UIScrollViewDelegate,UITextFieldDel
         }
     }
     @IBAction func isStylist(sender: AnyObject) {
-        
+        identity = "stylist"
     }
+    
     @IBAction func signup(sender: AnyObject) {
         if username.text == "" || email.text == "" || password.text == "" || password.text == "" {
             displayAlert("Field(s) are reqired", message: "Please fill in all the account information", enterMoreInfo: false)
@@ -78,9 +79,10 @@ class SignupViewController: UIViewController,UIScrollViewDelegate,UITextFieldDel
     @IBOutlet var password: UITextField!
     @IBOutlet var confirmPassword: UITextField!
     
-    var readyToSignup: Bool = false
     var activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView()
     var userId: Int = -1
+    var identity: String = "user"
+    var authToken: String = "undefined"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -164,7 +166,7 @@ class SignupViewController: UIViewController,UIScrollViewDelegate,UITextFieldDel
         let postEndpoint: String = "http://chudao.herokuapp.com/auth/register"
         let url = NSURL(string: postEndpoint)!
         let session = NSURLSession.sharedSession()
-        let postParams : [String: String] = ["username": self.username.text!, "password": self.password.text!]
+        let postParams : [String: String] = ["user-name": self.username.text!, "password": self.password.text!, "user-category": self.identity]
         
         // Create the request
         let request = NSMutableURLRequest(URL: url)
@@ -186,9 +188,11 @@ class SignupViewController: UIViewController,UIScrollViewDelegate,UITextFieldDel
             // Make sure we get an OK response
             guard let realResponse = response as? NSHTTPURLResponse where
                 realResponse.statusCode == 200 else {
-                    print("Not a 200 response")
+                    print("Not a 200 response, code: \((response as? NSHTTPURLResponse)?.statusCode)")
                     return
             }
+            
+            self.authToken = ((response as? NSHTTPURLResponse)?.allHeaderFields["X-Auth-Token"] as? String)!
             
             // Read the JSON
             do{
@@ -248,40 +252,6 @@ class SignupViewController: UIViewController,UIScrollViewDelegate,UITextFieldDel
         let fname = "\(username.text!).png"
         
         let mimetype = "image/png"
-        
-        
-        //define the data post parameter
-//        body.appendData("--\(boundary)--\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
-//        body.appendData("Content-Disposition:form-data; name=\"product-name\"\r\n\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
-//        body.appendData("profilePic\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
-//        
-////        body.appendData("--\(boundary)--\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
-////        body.appendData("Content-Disposition:form-data; name=\"product-category\"\r\n\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
-////        body.appendData("profilePic\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
-//        
-//        body.appendData("--\(boundary)--\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
-//        body.appendData("Content-Disposition:form-data; name=\"product-description\"\r\n\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
-//        body.appendData("profilePic\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
-//        
-//        body.appendData("--\(boundary)--\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
-//        body.appendData("Content-Disposition:form-data; name=\"product-tags\"\r\n\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
-//        body.appendData("profilePic\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
-//        
-//        body.appendData("--\(boundary)--\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
-//        body.appendData("Content-Disposition:form-data; name=\"product-link\"\r\n\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
-//        body.appendData("profilePic\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
-//        
-//        body.appendData("--\(boundary)--\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
-//        body.appendData("Content-Disposition:form-data; name=\"product-brand\"\r\n\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
-//        body.appendData("profilePic\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
-//        
-//        body.appendData("--\(boundary)--\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
-//        body.appendData("Content-Disposition:form-data; name=\"brand-link\"\r\n\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
-//        body.appendData("profilePic\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
-//        
-//        body.appendData("--\(boundary)--\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
-//        body.appendData("Content-Disposition:form-data; name=\"submit\"\r\n\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
-//        body.appendData("submit\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
         
         body.appendData("--\(boundary)\r\n".dataUsingEncoding(NSUTF8StringEncoding,allowLossyConversion: true)!)
         body.appendData("Content-Disposition:form-data; name=\"user-id\"\r\n\r\n\(self.userId)\r\n".dataUsingEncoding(NSUTF8StringEncoding,allowLossyConversion: true)!)
@@ -352,6 +322,8 @@ class SignupViewController: UIViewController,UIScrollViewDelegate,UITextFieldDel
             let destinationViewController = segue.destinationViewController as! UITabBarController
             let destinationTab = destinationViewController.viewControllers?.first as! HomeViewController
             destinationTab.userId = sender as! Int
+            destinationTab.identity = self.identity
+            destinationTab.authToken = self.authToken
         }
     }
     
