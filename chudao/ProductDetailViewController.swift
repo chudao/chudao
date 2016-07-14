@@ -183,6 +183,8 @@ class ProductDetailViewController: UIViewController {
             if let image = UIImage(data: data!){
                 dispatch_async(dispatch_get_main_queue()) {
                     self.productImage.image = image
+                    self.productImage.clipsToBounds = true
+                    self.productImage.contentMode = UIViewContentMode.ScaleAspectFit
                 }
             }else{
                 dispatch_async(dispatch_get_main_queue()) {

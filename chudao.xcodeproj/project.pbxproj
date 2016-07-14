@@ -22,6 +22,9 @@
 		E5EAFA261D310AF900846978 /* ProductDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5EAFA251D310AF900846978 /* ProductDetailViewController.swift */; };
 		E5EAFA281D31263A00846978 /* ProductSearchResultTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5EAFA271D31263A00846978 /* ProductSearchResultTableViewController.swift */; };
 		E5EAFA2A1D34D04A00846978 /* SuggestProductViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5EAFA291D34D04A00846978 /* SuggestProductViewController.swift */; };
+		E5EAFA2C1D37301E00846978 /* AccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5EAFA2B1D37301E00846978 /* AccountViewController.swift */; };
+		E5EAFA2E1D37340C00846978 /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5EAFA2D1D37340C00846978 /* TabBarViewController.swift */; };
+		E5EAFA301D37352900846978 /* ProductSearchResultNavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5EAFA2F1D37352900846978 /* ProductSearchResultNavigationViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,6 +66,9 @@
 		E5EAFA251D310AF900846978 /* ProductDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductDetailViewController.swift; sourceTree = "<group>"; };
 		E5EAFA271D31263A00846978 /* ProductSearchResultTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductSearchResultTableViewController.swift; sourceTree = "<group>"; };
 		E5EAFA291D34D04A00846978 /* SuggestProductViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SuggestProductViewController.swift; sourceTree = "<group>"; };
+		E5EAFA2B1D37301E00846978 /* AccountViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountViewController.swift; sourceTree = "<group>"; };
+		E5EAFA2D1D37340C00846978 /* TabBarViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
+		E5EAFA2F1D37352900846978 /* ProductSearchResultNavigationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductSearchResultNavigationViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -116,6 +122,9 @@
 				E5C7A9231D141EF00019008A /* AppDelegate.swift */,
 				E5C7A9251D141EF00019008A /* ViewController.swift */,
 				E5C7A9271D141EF00019008A /* Main.storyboard */,
+				E5EAFA2F1D37352900846978 /* ProductSearchResultNavigationViewController.swift */,
+				E5EAFA2D1D37340C00846978 /* TabBarViewController.swift */,
+				E5EAFA2B1D37301E00846978 /* AccountViewController.swift */,
 				E5EAFA291D34D04A00846978 /* SuggestProductViewController.swift */,
 				E5EAFA271D31263A00846978 /* ProductSearchResultTableViewController.swift */,
 				E5EAFA251D310AF900846978 /* ProductDetailViewController.swift */,
@@ -287,12 +296,15 @@
 				E5C7A92C1D141EF00019008A /* chudao.xcdatamodeld in Sources */,
 				E5EAFA281D31263A00846978 /* ProductSearchResultTableViewController.swift in Sources */,
 				E5EAFA261D310AF900846978 /* ProductDetailViewController.swift in Sources */,
+				E5EAFA301D37352900846978 /* ProductSearchResultNavigationViewController.swift in Sources */,
+				E5EAFA2E1D37340C00846978 /* TabBarViewController.swift in Sources */,
 				E5C7A9551D1512D50019008A /* SignupViewController.swift in Sources */,
 				E5C7A9241D141EF00019008A /* AppDelegate.swift in Sources */,
 				E5C7A9571D152F9D0019008A /* CheckBox.swift in Sources */,
 				E5EAFA201D2E53E500846978 /* HomeViewController.swift in Sources */,
 				E5EAFA221D2E54D100846978 /* NewRequestViewController.swift in Sources */,
 				E5EAFA2A1D34D04A00846978 /* SuggestProductViewController.swift in Sources */,
+				E5EAFA2C1D37301E00846978 /* AccountViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

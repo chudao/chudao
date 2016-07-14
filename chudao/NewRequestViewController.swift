@@ -8,7 +8,7 @@
 
 import UIKit
 
-class NewRequestViewController: UIViewController,UINavigationControllerDelegate, UIImagePickerControllerDelegate {
+class NewRequestViewController: UIViewController,UINavigationControllerDelegate, UIImagePickerControllerDelegate, UITextFieldDelegate, UITextViewDelegate {
 
     var userId: Int = -1
     var identity: String = "undefined"
@@ -74,7 +74,13 @@ class NewRequestViewController: UIViewController,UINavigationControllerDelegate,
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("newRequest currentUser: \(userId)")
+        print("NewRequest currentUser: \(userId)")
+        print("NewRequest currentIdentity \(identity)")
+        
+        priceLowerBound.delegate = self
+        priceHigherBound.delegate = self
+        Requirements.delegate = self
+        
         //gesture to dismiss keyboard
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ViewController.dismissKeyboard))
         view.addGestureRecognizer(tap)

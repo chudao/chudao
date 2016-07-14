@@ -8,7 +8,7 @@
 
 import UIKit
 
-class HomeViewController: UIViewController {
+class HomeViewController: UIViewController,UITextFieldDelegate, UISearchBarDelegate {
     
     var userId: Int = -1
     var identity: String = "undefined"
@@ -27,10 +27,19 @@ class HomeViewController: UIViewController {
         performSegueWithIdentifier("homeToNewRequest", sender: userId)
     }
     
+    @IBOutlet var newRequestButton: UIBarButtonItem!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         print("homepage currentUser: \(userId)")
         print("homepage identity: \(identity)")
+        
+        searchRequirment.delegate = self
+        
+        if identity != "user" {
+            newRequestButton.enabled = false
+            newRequestButton.tintColor = UIColor.clearColor();
+        }
         
         //gesture to dismiss keyboard
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ViewController.dismissKeyboard))

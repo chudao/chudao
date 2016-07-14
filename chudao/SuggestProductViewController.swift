@@ -8,12 +8,12 @@
 
 import UIKit
 
-class SuggestProductViewController: UIViewController {
+class SuggestProductViewController: UIViewController, UITextFieldDelegate, UITextViewDelegate {
 
     @IBAction func SubmitSuggestion(sender: AnyObject) {
         if productName.text == "" || brand.text == "" || purchaseLink.text == "" || productDescription.text == "" {
             displayAlert("Missing field(s)", message: "Please complete all fields before submitting")
-        }else if !(purchaseLink.text?.containsString("http://"))! || !(purchaseLink.text?.containsString("https://"))! {
+        }else if !(purchaseLink.text?.containsString("http://"))! && !(purchaseLink.text?.containsString("https://"))! {
             displayAlert("Invalid link", message: "Please enter a valid HTTP protocal. http:// OR https://")
         }else if !((purchaseLink.text?.containsString("."))!){
             //find wildcard
@@ -23,6 +23,9 @@ class SuggestProductViewController: UIViewController {
         }
     }
 
+    @IBAction func cancel(sender: AnyObject) {
+        performSegueWithIdentifier("suggestToHome", sender: self)
+    }
     @IBOutlet var productName: UITextField!
     @IBOutlet var brand: UITextField!
     @IBOutlet var purchaseLink: UITextField!
@@ -40,6 +43,15 @@ class SuggestProductViewController: UIViewController {
         print("Suggest page currentUser: \(userId)")
         print("Suggest page identity: \(identity)")
         
+        productName.delegate = self
+        brand.delegate = self
+        productDescription.delegate = self
+        tags.delegate = self
+        
+        //gesture to dismiss keyboard
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ViewController.dismissKeyboard))
+        view.addGestureRecognizer(tap)
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -50,8 +62,20 @@ class SuggestProductViewController: UIViewController {
     //display alert
     func displayAlert(title: String, message: String) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
-        alert.addAction(UIAlertAction(title: title, style: UIAlertActionStyle.Default, handler: nil))
+        alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil))
         self.presentViewController(alert, animated: true, completion: nil)
+    }
+    
+    //dismiss keyboard by clicking anywhere else
+    func dismissKeyboard() {
+        view.endEditing(true)
+    }
+    
+    //dimiss keyboard by pressing return key
+    func textFieldShouldReturn(textField: UITextField) -> Bool
+    {
+        textField.resignFirstResponder()
+        return true
     }
     
     //Query by tag for productID
