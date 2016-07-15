@@ -143,8 +143,10 @@ class ProductDetailViewController: UIViewController {
     //download image by fileKey
     func downloadImage(fileKey: String){
         //activate activity indicator and disable user interaction
-        activityIndicator.startAnimating()
-        UIApplication.sharedApplication().beginIgnoringInteractionEvents()
+        dispatch_async(dispatch_get_main_queue()) {
+            self.activityIndicator.startAnimating()
+            UIApplication.sharedApplication().beginIgnoringInteractionEvents()
+        }
         
         // Setup the session to make REST POST call
         let postEndpoint: String = "http://chudao.herokuapp.com/binary/download"
@@ -169,8 +171,10 @@ class ProductDetailViewController: UIViewController {
         // Make the POST call and handle it in a completion handler
         session.dataTaskWithRequest(request) { (data: NSData?, response: NSURLResponse?, error: NSError?) in
             //disable activiy indicator and re-activate user interaction
-            self.activityIndicator.stopAnimating()
-            UIApplication.sharedApplication().endIgnoringInteractionEvents()
+            dispatch_async(dispatch_get_main_queue()) {
+                self.activityIndicator.stopAnimating()
+                UIApplication.sharedApplication().endIgnoringInteractionEvents()
+            }
             
             // Make sure we get an OK response
             guard let realResponse = response as? NSHTTPURLResponse where

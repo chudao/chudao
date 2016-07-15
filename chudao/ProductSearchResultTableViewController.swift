@@ -75,8 +75,10 @@ class ProductSearchResultTableViewController: UITableViewController {
     //Query by tag for productID
     func queryByTag(tags: String){
         //activate activity indicator and disable user interaction
-        activityIndicator.startAnimating()
-        UIApplication.sharedApplication().beginIgnoringInteractionEvents()
+        dispatch_async(dispatch_get_main_queue()) {
+            self.activityIndicator.startAnimating()
+            UIApplication.sharedApplication().beginIgnoringInteractionEvents()
+        }
         
         // Setup the session to make REST POST call
         let postEndpoint: String = "http://chudao.herokuapp.com/query/product/tags"
@@ -100,8 +102,10 @@ class ProductSearchResultTableViewController: UITableViewController {
         // Make the POST call and handle it in a completion handler
         session.dataTaskWithRequest(request) { (data: NSData?, response: NSURLResponse?, error: NSError?) in
             //disable activiy indicator and re-activate user interaction
-            self.activityIndicator.stopAnimating()
-            UIApplication.sharedApplication().endIgnoringInteractionEvents()
+            dispatch_async(dispatch_get_main_queue()) {
+                self.activityIndicator.stopAnimating()
+                UIApplication.sharedApplication().endIgnoringInteractionEvents()
+            }
             
             // Make sure we get an OK response
             guard let realResponse = response as? NSHTTPURLResponse where
@@ -141,8 +145,10 @@ class ProductSearchResultTableViewController: UITableViewController {
     //Qury by productID for detail
     func queryByID(productId: String){
         //activate activity indicator and disable user interaction
-        activityIndicator.startAnimating()
-        UIApplication.sharedApplication().beginIgnoringInteractionEvents()
+        dispatch_async(dispatch_get_main_queue()) {
+            self.activityIndicator.startAnimating()
+            UIApplication.sharedApplication().beginIgnoringInteractionEvents()
+        }
         
         // Setup the session to make REST POST call
         let postEndpoint: String = "http://chudao.herokuapp.com/query/product/ids"
@@ -166,8 +172,10 @@ class ProductSearchResultTableViewController: UITableViewController {
         // Make the POST call and handle it in a completion handler
         session.dataTaskWithRequest(request) { (data: NSData?, response: NSURLResponse?, error: NSError?) in
             //disable activiy indicator and re-activate user interaction
-            self.activityIndicator.stopAnimating()
-            UIApplication.sharedApplication().endIgnoringInteractionEvents()
+            dispatch_async(dispatch_get_main_queue()) {
+                self.activityIndicator.stopAnimating()
+                UIApplication.sharedApplication().endIgnoringInteractionEvents()
+            }
             
             // Make sure we get an OK response
             guard let realResponse = response as? NSHTTPURLResponse where

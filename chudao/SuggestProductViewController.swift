@@ -81,8 +81,10 @@ class SuggestProductViewController: UIViewController, UITextFieldDelegate, UITex
     //Query by tag for productID
     func submit(){
         //activate activity indicator and disable user interaction
-        activityIndicator.startAnimating()
-        UIApplication.sharedApplication().beginIgnoringInteractionEvents()
+        dispatch_async(dispatch_get_main_queue()) {
+            self.activityIndicator.startAnimating()
+            UIApplication.sharedApplication().beginIgnoringInteractionEvents()
+        }
         
         // Setup the session to make REST POST call
         let postEndpoint: String = "http://chudao.herokuapp.com/product/add"
@@ -106,8 +108,10 @@ class SuggestProductViewController: UIViewController, UITextFieldDelegate, UITex
         // Make the POST call and handle it in a completion handler
         session.dataTaskWithRequest(request) { (data: NSData?, response: NSURLResponse?, error: NSError?) in
             //disable activiy indicator and re-activate user interaction
-            self.activityIndicator.stopAnimating()
-            UIApplication.sharedApplication().endIgnoringInteractionEvents()
+            dispatch_async(dispatch_get_main_queue()) {
+                self.activityIndicator.stopAnimating()
+                UIApplication.sharedApplication().endIgnoringInteractionEvents()
+            }
             
             // Make sure we get an OK response
             guard let realResponse = response as? NSHTTPURLResponse where
@@ -124,7 +128,7 @@ class SuggestProductViewController: UIViewController, UITextFieldDelegate, UITex
                 }
                 print("Response: \(jsonResponse)")
                 if jsonResponse["response-code"]! as! String == "030" {
-                        dispatch_async(dispatch_get_main_queue()) {
+                    dispatch_async(dispatch_get_main_queue()) {
                             self.displayAlert("Submitted", message: "Thank you for the information, we are verifing it")
                     }
                 }else{
