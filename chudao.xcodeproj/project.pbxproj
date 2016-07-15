@@ -25,6 +25,9 @@
 		E5EAFA2C1D37301E00846978 /* AccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5EAFA2B1D37301E00846978 /* AccountViewController.swift */; };
 		E5EAFA2E1D37340C00846978 /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5EAFA2D1D37340C00846978 /* TabBarViewController.swift */; };
 		E5EAFA301D37352900846978 /* ProductSearchResultNavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5EAFA2F1D37352900846978 /* ProductSearchResultNavigationViewController.swift */; };
+		E5EAFA341D38835900846978 /* SharedUserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5EAFA331D38835900846978 /* SharedUserInfo.swift */; };
+		E5EAFA361D38865100846978 /* RequestTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5EAFA351D38865100846978 /* RequestTableViewController.swift */; };
+		E5EAFA381D38879D00846978 /* MomentTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5EAFA371D38879D00846978 /* MomentTableViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -69,6 +72,9 @@
 		E5EAFA2B1D37301E00846978 /* AccountViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountViewController.swift; sourceTree = "<group>"; };
 		E5EAFA2D1D37340C00846978 /* TabBarViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
 		E5EAFA2F1D37352900846978 /* ProductSearchResultNavigationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductSearchResultNavigationViewController.swift; sourceTree = "<group>"; };
+		E5EAFA331D38835900846978 /* SharedUserInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SharedUserInfo.swift; sourceTree = "<group>"; };
+		E5EAFA351D38865100846978 /* RequestTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestTableViewController.swift; sourceTree = "<group>"; };
+		E5EAFA371D38879D00846978 /* MomentTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MomentTableViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,6 +105,7 @@
 		E5C7A9171D141EF00019008A = {
 			isa = PBXGroup;
 			children = (
+				E5EAFA331D38835900846978 /* SharedUserInfo.swift */,
 				E5C7A9221D141EF00019008A /* chudao */,
 				E5C7A93A1D141EF00019008A /* chudaoTests */,
 				E5C7A9451D141EF00019008A /* chudaoUITests */,
@@ -122,6 +129,8 @@
 				E5C7A9231D141EF00019008A /* AppDelegate.swift */,
 				E5C7A9251D141EF00019008A /* ViewController.swift */,
 				E5C7A9271D141EF00019008A /* Main.storyboard */,
+				E5EAFA371D38879D00846978 /* MomentTableViewController.swift */,
+				E5EAFA351D38865100846978 /* RequestTableViewController.swift */,
 				E5EAFA2F1D37352900846978 /* ProductSearchResultNavigationViewController.swift */,
 				E5EAFA2D1D37340C00846978 /* TabBarViewController.swift */,
 				E5EAFA2B1D37301E00846978 /* AccountViewController.swift */,
@@ -293,11 +302,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				E5C7A9261D141EF00019008A /* ViewController.swift in Sources */,
+				E5EAFA381D38879D00846978 /* MomentTableViewController.swift in Sources */,
+				E5EAFA341D38835900846978 /* SharedUserInfo.swift in Sources */,
 				E5C7A92C1D141EF00019008A /* chudao.xcdatamodeld in Sources */,
 				E5EAFA281D31263A00846978 /* ProductSearchResultTableViewController.swift in Sources */,
 				E5EAFA261D310AF900846978 /* ProductDetailViewController.swift in Sources */,
 				E5EAFA301D37352900846978 /* ProductSearchResultNavigationViewController.swift in Sources */,
 				E5EAFA2E1D37340C00846978 /* TabBarViewController.swift in Sources */,
+				E5EAFA361D38865100846978 /* RequestTableViewController.swift in Sources */,
 				E5C7A9551D1512D50019008A /* SignupViewController.swift in Sources */,
 				E5C7A9241D141EF00019008A /* AppDelegate.swift in Sources */,
 				E5C7A9571D152F9D0019008A /* CheckBox.swift in Sources */,

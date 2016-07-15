@@ -74,8 +74,8 @@ class NewRequestViewController: UIViewController,UINavigationControllerDelegate,
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("NewRequest currentUser: \(userId)")
-        print("NewRequest currentIdentity \(identity)")
+        print("NewRequest userid: \(userId)")
+        print("NewRequest identity \(identity)")
         
         priceLowerBound.delegate = self
         priceHigherBound.delegate = self

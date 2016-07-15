@@ -16,10 +16,17 @@ class AccountViewController: UIViewController {
     @IBAction func suggest(sender: AnyObject) {
         performSegueWithIdentifier("accountToSuggest", sender: self)
     }
+    
+    var sharedUserInfo = SharedUserInfo()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        
+        let tbc = tabBarController as! TabBarViewController
+        sharedUserInfo = tbc.sharedUserInfo
+        
+        print("Accountpage userid: \(sharedUserInfo.userId)")
+        print("Accountpage identity: \(sharedUserInfo.identity)")
     }
 
     override func didReceiveMemoryWarning() {
@@ -27,11 +34,12 @@ class AccountViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "accountToSuggest" {
-            
+            let detinationController = segue.destinationViewController as! SuggestProductViewController
+            detinationController.userId = sharedUserInfo.userId
+            detinationController.identity = sharedUserInfo.identity
+            detinationController.authToken = sharedUserInfo.authToken
         }
     }
-
 }

@@ -13,6 +13,7 @@ class HomeViewController: UIViewController,UITextFieldDelegate, UISearchBarDeleg
     var userId: Int = -1
     var identity: String = "undefined"
     var authToken: String = "undefined"
+    var sharedUserInfo = SharedUserInfo()
     
     @IBOutlet var searchRequirment: UISearchBar!
     @IBAction func search(sender: AnyObject) {
@@ -31,8 +32,16 @@ class HomeViewController: UIViewController,UITextFieldDelegate, UISearchBarDeleg
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("homepage currentUser: \(userId)")
-        print("homepage identity: \(identity)")
+        
+        let tbc = tabBarController as! TabBarViewController
+        sharedUserInfo = tbc.sharedUserInfo
+        sharedUserInfo.userId = userId
+        sharedUserInfo.identity = identity
+        sharedUserInfo.authToken = authToken
+        
+        
+        print("Homepage userid: \(sharedUserInfo.userId)")
+        print("Homepage identity: \(sharedUserInfo.identity)")
         
         searchRequirment.delegate = self
         

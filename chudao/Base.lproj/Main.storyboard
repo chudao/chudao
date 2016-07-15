@@ -134,10 +134,10 @@
             </objects>
             <point key="canvasLocation" x="1496.5" y="1077.5"/>
         </scene>
-        <!--Table View Controller-->
+        <!--Request Table View Controller-->
         <scene sceneID="39v-cx-lCV">
             <objects>
-                <tableViewController id="NBi-G6-y3r" sceneMemberID="viewController">
+                <tableViewController id="NBi-G6-y3r" customClass="RequestTableViewController" customModule="chudao" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="UGE-om-k08">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -753,10 +753,10 @@
             </objects>
             <point key="canvasLocation" x="1496.5" y="2013.5"/>
         </scene>
-        <!--Table View Controller-->
+        <!--Moment Table View Controller-->
         <scene sceneID="pNr-Y2-PU1">
             <objects>
-                <tableViewController id="nVC-FU-bQj" sceneMemberID="viewController">
+                <tableViewController id="nVC-FU-bQj" customClass="MomentTableViewController" customModule="chudao" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="Tvo-qG-tQ0">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -803,8 +803,8 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="hRy-sI-kPe"/>
-        <segue reference="dIv-zf-onl"/>
+        <segue reference="yvY-jC-Yvz"/>
         <segue reference="zr1-Bw-5qq"/>
+        <segue reference="dIv-zf-onl"/>
     </inferredMetricsTieBreakers>
 </document>

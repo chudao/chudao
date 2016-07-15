@@ -36,12 +36,12 @@ class SuggestProductViewController: UIViewController, UITextFieldDelegate, UITex
     var authToken: String = "undefined"
     var identity:String = "undefined"
     var activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView()
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        print("Suggest page currentUser: \(userId)")
-        print("Suggest page identity: \(identity)")
+        print("Suggestpage serid: \(userId)")
+        print("Suggestpage identity: \(identity)")
         
         productName.delegate = self
         brand.delegate = self
@@ -139,5 +139,13 @@ class SuggestProductViewController: UIViewController, UITextFieldDelegate, UITex
             }.resume()
     }
 
-
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if  segue.identifier == "suggestToHome" {
+            let destinationViewController = segue.destinationViewController as! UITabBarController
+            let destinationTab = destinationViewController.viewControllers?.first as! HomeViewController
+            destinationTab.userId = self.userId
+            destinationTab.identity = self.identity
+            destinationTab.authToken = self.authToken
+        }
+    }
 }

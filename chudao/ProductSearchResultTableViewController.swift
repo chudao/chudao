@@ -26,7 +26,8 @@ class ProductSearchResultTableViewController: UITableViewController {
         tableView.delegate = self
         tableView.dataSource = self
         
-        print("ProductSearch currentuser: \(userId)")
+        print("ProductSearchpage userid: \(userId)")
+        print("ProductSearchpage identity: \(identity)")
         
         //activity indicator
         activityIndicator = UIActivityIndicatorView(frame: self.view.bounds)
