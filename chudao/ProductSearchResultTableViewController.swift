@@ -16,9 +16,14 @@ class ProductSearchResultTableViewController: UITableViewController {
     var productDetail: [[String:AnyObject]] = []
     var authToken: String = "undefined"
     var identity: String = "undefined"
+    var searchToAdd: Bool = false
     
     @IBAction func cancel(sender: AnyObject) {
-        performSegueWithIdentifier("searchResultToHome", sender:self)
+        if searchToAdd {
+            performSegueWithIdentifier("searchResultToRespond", sender: self)
+        }else{
+            performSegueWithIdentifier("searchResultToHome", sender:self)
+        }
     }
     
     override func viewDidLoad() {
@@ -41,13 +46,8 @@ class ProductSearchResultTableViewController: UITableViewController {
             let preparedSearchRequirement = searchRequirement.componentsSeparatedByString(" ").joinWithSeparator(",")
             queryByTag(preparedSearchRequirement)
         }
-
         
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-        
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
+        tableView.reloadData()
     }
     
     override func didReceiveMemoryWarning() {
@@ -232,16 +232,25 @@ class ProductSearchResultTableViewController: UITableViewController {
             destinationViewController.productDescription = sender![2] as! String
             destinationViewController.productLink = sender![3] as! String
             destinationViewController.productId = sender![4] as! String
-            destinationViewController.identity = self.identity
-            destinationViewController.authToken = self.authToken
+            destinationViewController.identity = identity
+            destinationViewController.authToken = authToken
+            destinationViewController.searchToAdd = searchToAdd
+            destinationViewController.productDetail = productDetail
         }
         
         if segue.identifier == "searchResultToHome" {
             let destinationViewController = segue.destinationViewController as! UITabBarController
             let destinationTab = destinationViewController.viewControllers?.first as! HomeViewController
-            destinationTab.userId = self.userId
-            destinationTab.identity = self.identity
-            destinationTab.authToken = self.authToken
+            destinationTab.userId = userId
+            destinationTab.identity = identity
+            destinationTab.authToken = authToken
+        }
+        
+        if segue.identifier == "searchResultToRespond" {
+            let destinationViewController = segue.destinationViewController as! RespondViewController
+            destinationViewController.userId = userId
+            destinationViewController.authToken = authToken
+            destinationViewController.identity = identity
         }
     }
     

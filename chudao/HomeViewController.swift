@@ -14,6 +14,7 @@ class HomeViewController: UIViewController,UITextFieldDelegate, UISearchBarDeleg
     var identity: String = "undefined"
     var authToken: String = "undefined"
     var sharedUserInfo = SharedUserInfo()
+
     
     @IBOutlet var searchRequirment: UISearchBar!
     @IBAction func search(sender: AnyObject) {
@@ -35,9 +36,12 @@ class HomeViewController: UIViewController,UITextFieldDelegate, UISearchBarDeleg
         
         let tbc = tabBarController as! TabBarViewController
         sharedUserInfo = tbc.sharedUserInfo
-        sharedUserInfo.userId = userId
-        sharedUserInfo.identity = identity
-        sharedUserInfo.authToken = authToken
+        
+        if tbc.sharedUserInfo.userId == -1 {
+            sharedUserInfo.userId = userId
+            sharedUserInfo.identity = identity
+            sharedUserInfo.authToken = authToken
+        }
         
         
         print("Homepage userid: \(sharedUserInfo.userId)")
@@ -53,6 +57,7 @@ class HomeViewController: UIViewController,UITextFieldDelegate, UISearchBarDeleg
         //gesture to dismiss keyboard
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ViewController.dismissKeyboard))
         view.addGestureRecognizer(tap)
+
     }
 
     override func didReceiveMemoryWarning() {

@@ -18,8 +18,12 @@ class ProductDetailViewController: UIViewController {
     var productLink: String = ""
     var productDescription: String = ""
     var authToken: String = "undefined"
+    var searchToAdd: Bool = false
+    var productDetail: [[String:AnyObject]] = []
     var activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView()
+    var imageAsNSData: NSData = NSData()
 
+    @IBOutlet var purchaseButton: UIButton!
 
     @IBAction func done(sender: AnyObject) {
          performSegueWithIdentifier("productDetailToSearchResult", sender: userId)
@@ -31,7 +35,11 @@ class ProductDetailViewController: UIViewController {
     @IBOutlet var name: UILabel!
     @IBOutlet var descriptionInfo: UILabel!
     @IBAction func purchase(sender: AnyObject) {
-        displayAlert("Redirecting", message: "You are being redirected to the merchandiser's website for purchase", enterMoreInfo: true)
+        if searchToAdd {
+            performSegueWithIdentifier("addToRespond", sender: self)
+        }else{
+            displayAlert("Redirecting", message: "You are being redirected to the merchandiser's website for purchase", enterMoreInfo: true)
+        }
     }
     
     override func viewDidLoad() {
@@ -42,6 +50,10 @@ class ProductDetailViewController: UIViewController {
         name.text = productName
         productImage.clipsToBounds = true
         productImage.contentMode = UIViewContentMode.ScaleAspectFill
+        
+        if searchToAdd {
+            purchaseButton.setTitle("Add", forState: .Normal)
+        }
 
         //activity indicator
         activityIndicator = UIActivityIndicatorView(frame: self.view.bounds)
@@ -183,9 +195,10 @@ class ProductDetailViewController: UIViewController {
                     return
             }
             print("Response \(response)")
-            print("Data: \(data?.length)")
+
             if let image = UIImage(data: data!){
                 dispatch_async(dispatch_get_main_queue()) {
+                    self.imageAsNSData = data!
                     self.productImage.image = image
                     self.productImage.clipsToBounds = true
                     self.productImage.contentMode = UIViewContentMode.ScaleAspectFit
@@ -202,8 +215,18 @@ class ProductDetailViewController: UIViewController {
         if segue.identifier == "productDetailToSearchResult" {
             let destinationViewController = segue.destinationViewController as! ProductSearchResultTableViewController
             destinationViewController.userId = sender as! Int
-            destinationViewController.authToken = self.authToken
-            destinationViewController.identity = self.identity
+            destinationViewController.authToken = authToken
+            destinationViewController.identity = identity
+            destinationViewController.searchToAdd = searchToAdd
+            destinationViewController.productDetail = productDetail
+        }
+        
+        if segue.identifier == "addToRespond" {
+            let destinationViewController = segue.destinationViewController as! RespondViewController
+            destinationViewController.userId = userId
+            destinationViewController.authToken = authToken
+            destinationViewController.identity = identity
+            destinationViewController.productDetail.append(["productId":productId,"productName":productName,"productBrand":productBrand,"productDescription":productDescription,"productImage":imageAsNSData])
         }
     }
 }

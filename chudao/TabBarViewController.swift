@@ -10,14 +10,20 @@ import UIKit
 
 class TabBarViewController: UITabBarController {
     let sharedUserInfo = SharedUserInfo()
+    var switchTo: String = "-1"
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationController?.navigationBarHidden = true
-
         
     }
-
+    
+    override func viewWillAppear(animated: Bool) {
+        if switchTo == "3"{
+            self.selectedIndex = 2
+        }
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }

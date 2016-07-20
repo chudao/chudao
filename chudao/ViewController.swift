@@ -74,6 +74,7 @@ class ViewController: UIViewController,UITextFieldDelegate {
             UIApplication.sharedApplication().beginIgnoringInteractionEvents()
         }
         
+        
         // Setup the session to make REST POST call
         let postEndpoint: String = "http://chudao.herokuapp.com/auth/login"
         let url = NSURL(string: postEndpoint)!
@@ -98,6 +99,7 @@ class ViewController: UIViewController,UITextFieldDelegate {
                 self.activityIndicator.stopAnimating()
                 UIApplication.sharedApplication().endIgnoringInteractionEvents()
             }
+            
 
             // Make sure we get an OK response
             guard let realResponse = response as? NSHTTPURLResponse where
@@ -105,8 +107,7 @@ class ViewController: UIViewController,UITextFieldDelegate {
                     print("Not a 200 response, code: \((response as? NSHTTPURLResponse)?.statusCode)")
                     return
             }
-            self.authToken = ((response as? NSHTTPURLResponse)?.allHeaderFields["X-Auth-Token"] as? String)!
-            print("Tokne \(self.authToken)")
+
             
             
             if let postString = NSString(data:data!, encoding: NSUTF8StringEncoding) as? String {
@@ -122,6 +123,8 @@ class ViewController: UIViewController,UITextFieldDelegate {
                 }
                 if jsonResponse["response-code"]! as! String == "000" {
                     dispatch_async(dispatch_get_main_queue()) {
+                        self.authToken = ((response as? NSHTTPURLResponse)?.allHeaderFields["X-Auth-Token"] as? String)!
+                        print("Tokne \(self.authToken)")
                         let userId = jsonResponse["user-id"]! as! Int
                         self.identity = jsonResponse["user-category"] as! String
                         self.performSegueWithIdentifier("loginToHome", sender: userId)
