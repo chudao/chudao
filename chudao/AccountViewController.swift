@@ -10,8 +10,12 @@ import UIKit
 
 class AccountViewController: UIViewController {
 
+    @IBOutlet var submittedRecommendationButton: UIButton!
     @IBAction func logout(sender: AnyObject) {
         performSegueWithIdentifier("accountToHome", sender: self)
+    }
+    @IBAction func submittedRecommendations(sender: AnyObject) {
+        //performSegueWithIdentifier("", sender: self)
     }
     @IBAction func suggest(sender: AnyObject) {
         performSegueWithIdentifier("accountToSuggest", sender: self)
@@ -27,11 +31,14 @@ class AccountViewController: UIViewController {
         
         print("Accountpage userid: \(sharedUserInfo.userId)")
         print("Accountpage identity: \(sharedUserInfo.identity)")
+        
+        if sharedUserInfo.identity != "stylist" {
+            submittedRecommendationButton.hidden = true
+        }
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {

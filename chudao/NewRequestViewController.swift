@@ -315,8 +315,8 @@ class NewRequestViewController: UIViewController,UINavigationControllerDelegate,
             let destinationViewController = segue.destinationViewController as! UITabBarController
             let destinationTab = destinationViewController.viewControllers?.first as! HomeViewController
             destinationTab.userId = sender as! Int
-            destinationTab.identity = self.identity
-            destinationTab.authToken = self.authToken
+            destinationTab.identity = identity
+            destinationTab.authToken = authToken
         }
     }
 

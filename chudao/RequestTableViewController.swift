@@ -40,15 +40,12 @@ class RequestTableViewController: UITableViewController {
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     //fetch all the requests available on server
     func fetchRequest(){
         
     }
-
-    // MARK: - Table view data source
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
@@ -71,6 +68,13 @@ class RequestTableViewController: UITableViewController {
     */
 
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "requestTabToNewRequest" {
+            let destinationViewController = segue.destinationViewController as! NewRequestViewController
+            destinationViewController.userId = sharedUserInfo.userId
+            destinationViewController.authToken = sharedUserInfo.authToken
+            destinationViewController.identity = sharedUserInfo.identity
+        }
+        
         if segue.identifier == "requestToRespond" {
             let destinationViewController = segue.destinationViewController as! RespondViewController
             destinationViewController.userId = sharedUserInfo.userId
@@ -80,6 +84,11 @@ class RequestTableViewController: UITableViewController {
             destinationViewController.responseDetail["userDefaultImage"] = NSData()
             destinationViewController.responseDetail["userDefaultImage"] = NSData()
             destinationViewController.responseDetail["userNote"] = ""
+        }
+        
+        if segue.identifier == "requestToViewResponse" {
+            let destinationViewController = segue.destinationViewController as! ResponseViewController
+            
         }
     }
 

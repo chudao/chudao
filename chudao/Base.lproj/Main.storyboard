@@ -91,7 +91,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="r85-GL-kdc" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2254.5" y="1077.5"/>
+            <point key="canvasLocation" x="4338.5" y="1673.5"/>
         </scene>
         <!--Me-->
         <scene sceneID="Xy2-zc-Ww2">
@@ -121,30 +121,40 @@
                                     <action selector="logout:" destination="zMg-bC-ooK" eventType="touchUpInside" id="PmC-jT-Cql"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Vi2-MF-rNH">
+                                <rect key="frame" x="92" y="432" width="191" height="30"/>
+                                <state key="normal" title="Submitted recommendation"/>
+                                <connections>
+                                    <action selector="submittedRecommendations:" destination="zMg-bC-ooK" eventType="touchUpInside" id="jRL-CV-IKF"/>
+                                    <action selector="suggest:" destination="zMg-bC-ooK" eventType="touchUpInside" id="D4O-IT-Qyt"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="Me" id="cTp-74-qri"/>
                     <connections>
+                        <outlet property="submittedRecommendationButton" destination="Vi2-MF-rNH" id="fjZ-Sr-9yK"/>
                         <segue destination="OVQ-P1-hL6" kind="show" identifier="accountToSuggest" id="67q-zw-tiF"/>
                         <segue destination="BYZ-38-t0r" kind="show" identifier="accountToHome" id="pj8-Xk-CyK"/>
+                        <segue destination="dyH-0z-JVg" kind="show" identifier="accountToSubmittedResponse" id="vKE-xd-jJg"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="CdP-VK-RhB" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1496.5" y="1077.5"/>
+            <point key="canvasLocation" x="3660.5" y="1673.5"/>
         </scene>
-        <!--Requests-->
+        <!--Request-->
         <scene sceneID="39v-cx-lCV">
             <objects>
-                <tableViewController id="NBi-G6-y3r" customClass="RequestTableViewController" customModule="chudao" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController title="Request" id="NBi-G6-y3r" customClass="RequestTableViewController" customModule="chudao" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="UGE-om-k08">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellInRequest" id="jcr-X0-Bqg">
-                                <rect key="frame" x="0.0" y="28" width="375" height="44"/>
+                                <rect key="frame" x="0.0" y="92" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="jcr-X0-Bqg" id="Iaq-rS-Q6f">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
@@ -174,7 +184,58 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kzv-w6-tJA" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2254.5" y="2013.5"/>
+            <point key="canvasLocation" x="804.5" y="1989.5"/>
+        </scene>
+        <!--Table View Controller-->
+        <scene sceneID="MRR-Wo-bdD">
+            <objects>
+                <tableViewController id="7w1-F2-UIv" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="kiC-9J-18I">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellInSubmittedResponse" id="ucS-AI-8vk">
+                                <rect key="frame" x="0.0" y="92" width="375" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="ucS-AI-8vk" id="RDB-22-059">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="7w1-F2-UIv" id="GDY-sx-5zq"/>
+                            <outlet property="delegate" destination="7w1-F2-UIv" id="a9h-B3-JP7"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" id="0a6-Cg-LDX"/>
+                    <connections>
+                        <segue destination="msz-rl-Ukj" kind="show" identifier="submittedResponseToResponseDetail" id="4ea-IJ-uKD"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="51m-UH-RPW" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4338.5" y="2573.5"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="abm-Uq-fTg">
+            <objects>
+                <viewController id="msz-rl-Ukj" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="K8h-Gi-JxO"/>
+                        <viewControllerLayoutGuide type="bottom" id="8ga-R5-A3F"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Sba-Id-4na">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="o3r-5l-Vhw" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="5025.5" y="2573.5"/>
         </scene>
         <!--Respond-->
         <scene sceneID="KVH-2Z-7u5">
@@ -281,12 +342,12 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3GX-J7-YVu" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3110.5" y="1701.5"/>
+            <point key="canvasLocation" x="1584.5" y="1669.5"/>
         </scene>
-        <!--Respond Product Detail View Controller-->
+        <!--Respond product detail-->
         <scene sceneID="M3I-BK-ycq">
             <objects>
-                <viewController id="xq7-Mf-Xk6" customClass="RespondProductDetailViewController" customModule="chudao" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Respond product detail" id="xq7-Mf-Xk6" customClass="RespondProductDetailViewController" customModule="chudao" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="hfs-9d-J4Y"/>
                         <viewControllerLayoutGuide type="bottom" id="aaf-ix-aLE"/>
@@ -344,12 +405,12 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="NTb-ck-NYO" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3738.5" y="1701.5"/>
+            <point key="canvasLocation" x="2212.5" y="1669.5"/>
         </scene>
-        <!--View Controller-->
+        <!--Response-->
         <scene sceneID="B9U-Th-t6p">
             <objects>
-                <viewController id="hAZ-Xn-qei" sceneMemberID="viewController">
+                <viewController title="Response" id="hAZ-Xn-qei" customClass="ResponseViewController" customModule="chudao" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="1gZ-NV-J1U"/>
                         <viewControllerLayoutGuide type="bottom" id="DjR-bs-jTQ"/>
@@ -412,12 +473,12 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="yBd-Db-W2M" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3110.5" y="2605.5"/>
+            <point key="canvasLocation" x="1584.5" y="2573.5"/>
         </scene>
-        <!--View Controller-->
+        <!--Specific response-->
         <scene sceneID="spy-bA-c1S">
             <objects>
-                <viewController id="Pb9-m4-fWt" sceneMemberID="viewController">
+                <viewController title="Specific response" id="Pb9-m4-fWt" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="zOK-Tf-dgF"/>
                         <viewControllerLayoutGuide type="bottom" id="tRU-RZ-XJ6"/>
@@ -475,12 +536,12 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Akt-Dz-SJU" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3738.5" y="2605.5"/>
+            <point key="canvasLocation" x="2212.5" y="2573.5"/>
         </scene>
-        <!--Response Product Detail View Controller-->
+        <!--Response recemmended product detail-->
         <scene sceneID="YeD-hM-XAR">
             <objects>
-                <viewController id="idq-ac-93G" customClass="ResponseProductDetailViewController" customModule="chudao" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Response recemmended product detail" id="idq-ac-93G" customClass="ResponseProductDetailViewController" customModule="chudao" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="oaJ-bG-cBE"/>
                         <viewControllerLayoutGuide type="bottom" id="dim-ib-uYh"/>
@@ -542,12 +603,12 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="RZk-Y4-59i" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4344.5" y="2605.5"/>
+            <point key="canvasLocation" x="2818.5" y="2573.5"/>
         </scene>
-        <!--Products-->
+        <!--Product search result-->
         <scene sceneID="9Co-jc-OSf">
             <objects>
-                <tableViewController id="19o-an-XJA" customClass="ProductSearchResultTableViewController" customModule="chudao" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController title="Product search result" id="19o-an-XJA" customClass="ProductSearchResultTableViewController" customModule="chudao" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="59" sectionHeaderHeight="28" sectionFooterHeight="28" id="lxQ-hK-MJL">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -583,7 +644,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="JIQ-6j-u8a" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2731.5" y="-819.5"/>
+            <point key="canvasLocation" x="1281.5" y="-807.5"/>
         </scene>
         <!--Product detail-->
         <scene sceneID="yYi-vd-egQ">
@@ -643,12 +704,12 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3gr-1Y-FTF" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3217.5" y="-819.5"/>
+            <point key="canvasLocation" x="1767.5" y="-807.5"/>
         </scene>
-        <!--Home-->
+        <!--home-->
         <scene sceneID="QSb-SP-VJz">
             <objects>
-                <viewController id="6rR-pP-0r3" customClass="HomeViewController" customModule="chudao" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="home" id="6rR-pP-0r3" customClass="HomeViewController" customModule="chudao" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="EIA-50-NbB"/>
                         <viewControllerLayoutGuide type="bottom" id="8hm-zs-F6l"/>
@@ -699,12 +760,12 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kPB-lA-8a5" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1496.5" y="161.5"/>
+            <point key="canvasLocation" x="298.5" y="-807.5"/>
         </scene>
-        <!--Home-->
+        <!--Tab-->
         <scene sceneID="TQh-EK-OCZ">
             <objects>
-                <tabBarController title="Home" id="Mw6-Vx-mYX" customClass="TabBarViewController" customModule="chudao" customModuleProvider="target" sceneMemberID="viewController">
+                <tabBarController title="Tab" id="Mw6-Vx-mYX" customClass="TabBarViewController" customModule="chudao" customModuleProvider="target" sceneMemberID="viewController">
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                     <tabBar key="tabBar" contentMode="scaleToFill" id="Bep-Yo-vxi">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="49"/>
@@ -721,10 +782,10 @@
             </objects>
             <point key="canvasLocation" x="804.5" y="539.5"/>
         </scene>
-        <!--submitRequest-->
+        <!--Submit request-->
         <scene sceneID="uTM-f4-r2Y">
             <objects>
-                <viewController title="submitRequest" id="Ryv-fK-riC" customClass="NewRequestViewController" customModule="chudao" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Submit request" id="Ryv-fK-riC" customClass="NewRequestViewController" customModule="chudao" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="ysk-7D-Ll1"/>
                         <viewControllerLayoutGuide type="bottom" id="cvY-lK-N6c"/>
@@ -835,12 +896,12 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="40q-Qf-gXg" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2254.5" y="161.5"/>
+            <point key="canvasLocation" x="2158.5" y="273.5"/>
         </scene>
-        <!--login-->
+        <!--Login-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController title="login" id="BYZ-38-t0r" customClass="ViewController" customModule="chudao" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Login" id="BYZ-38-t0r" customClass="ViewController" customModule="chudao" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
@@ -931,12 +992,12 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-29.5" y="113.5"/>
+            <point key="canvasLocation" x="-741.5" y="185.5"/>
         </scene>
-        <!--Signup View Controller-->
+        <!--Signup-->
         <scene sceneID="Vs9-F4-PaN">
             <objects>
-                <viewController id="vC5-Rd-g9R" customClass="SignupViewController" customModule="chudao" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Signup" id="vC5-Rd-g9R" customClass="SignupViewController" customModule="chudao" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Vgs-Te-pzq"/>
                         <viewControllerLayoutGuide type="bottom" id="YYg-CO-48c"/>
@@ -1091,12 +1152,12 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Qft-nE-KoY" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-29.5" y="1041.5"/>
+            <point key="canvasLocation" x="-741.5" y="1113.5"/>
         </scene>
-        <!--Product Search Result Navigation View Controller-->
+        <!--Product search result navigation-->
         <scene sceneID="Vdl-Go-DII">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="WIH-yi-0ZC" customClass="ProductSearchResultNavigationViewController" customModule="chudao" customModuleProvider="target" sceneMemberID="viewController">
+                <navigationController title="Product search result navigation" automaticallyAdjustsScrollViewInsets="NO" id="WIH-yi-0ZC" customClass="ProductSearchResultNavigationViewController" customModule="chudao" customModuleProvider="target" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="pIb-v5-VHa">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -1109,12 +1170,12 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qNL-p0-OlH" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2254.5" y="-819.5"/>
+            <point key="canvasLocation" x="804.5" y="-807.5"/>
         </scene>
-        <!--Request-->
+        <!--Request navigation-->
         <scene sceneID="mg6-gl-QNm">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Nqy-21-LiO" sceneMemberID="viewController">
+                <navigationController title="Request navigation" automaticallyAdjustsScrollViewInsets="NO" id="Nqy-21-LiO" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Request" id="Ii7-uF-MQH"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="9CP-7A-tcq">
@@ -1128,18 +1189,36 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dAy-6q-hPM" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1496.5" y="2013.5"/>
+            <point key="canvasLocation" x="250.5" y="1989.5"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="kkk-24-zaT">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="dyH-0z-JVg" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="eyW-wf-cPH">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="7w1-F2-UIv" kind="relationship" relationship="rootViewController" id="SIb-cg-wXl"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="G4A-Wh-PSZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3660.5" y="2573.5"/>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="pj8-Xk-CyK"/>
-        <segue reference="HWF-Ab-r3M"/>
-        <segue reference="Gl3-DR-xQ7"/>
+        <segue reference="d73-7Y-Gnu"/>
         <segue reference="lIW-72-uBg"/>
         <segue reference="wCM-Zh-Nqz"/>
-        <segue reference="d73-7Y-Gnu"/>
-        <segue reference="1JA-Na-5DS"/>
+        <segue reference="Gl3-DR-xQ7"/>
+        <segue reference="Kkb-ez-fbr"/>
+        <segue reference="OMY-PQ-R3f"/>
         <segue reference="zr1-Bw-5qq"/>
+        <segue reference="dIv-zf-onl"/>
         <segue reference="UcD-sl-Fhh"/>
     </inferredMetricsTieBreakers>
 </document>
