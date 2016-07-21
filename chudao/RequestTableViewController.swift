@@ -71,11 +71,15 @@ class RequestTableViewController: UITableViewController {
     */
 
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if segue.identifier == "requestTabToNewRequest" {
-            let destinationViewController = segue.destinationViewController as! NewRequestViewController
+        if segue.identifier == "requestToRespond" {
+            let destinationViewController = segue.destinationViewController as! RespondViewController
             destinationViewController.userId = sharedUserInfo.userId
             destinationViewController.authToken = sharedUserInfo.authToken
             destinationViewController.identity = sharedUserInfo.identity
+            // todo change to image data
+            destinationViewController.responseDetail["userDefaultImage"] = NSData()
+            destinationViewController.responseDetail["userDefaultImage"] = NSData()
+            destinationViewController.responseDetail["userNote"] = ""
         }
     }
 

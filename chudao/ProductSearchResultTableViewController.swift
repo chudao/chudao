@@ -14,6 +14,8 @@ class ProductSearchResultTableViewController: UITableViewController {
     var activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView()
     var searchRequirement: String = ""
     var productDetail: [[String:AnyObject]] = []
+    var responseDetail: [String:AnyObject] = [:]
+    var recommendedProduct: [[String:AnyObject]] = []
     var authToken: String = "undefined"
     var identity: String = "undefined"
     var searchToAdd: Bool = false
@@ -235,7 +237,8 @@ class ProductSearchResultTableViewController: UITableViewController {
             destinationViewController.identity = identity
             destinationViewController.authToken = authToken
             destinationViewController.searchToAdd = searchToAdd
-            destinationViewController.productDetail = productDetail
+            destinationViewController.recommendedProduct = recommendedProduct
+            destinationViewController.responseDetail = responseDetail
         }
         
         if segue.identifier == "searchResultToHome" {
@@ -251,6 +254,8 @@ class ProductSearchResultTableViewController: UITableViewController {
             destinationViewController.userId = userId
             destinationViewController.authToken = authToken
             destinationViewController.identity = identity
+            destinationViewController.responseDetail = responseDetail
+            destinationViewController.recommendedProduct = recommendedProduct
         }
     }
     

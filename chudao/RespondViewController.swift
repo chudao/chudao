@@ -10,12 +10,15 @@ import UIKit
 
 class RespondViewController: UIViewController,UITableViewDelegate,UITableViewDataSource {
     
-    var userId: Int = -10
+    var userId: Int = -1
     var activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView()
-    var productDetail: [[String:AnyObject]] = []
-    var authToken: String = "undefined"
+    var authToken: String = "4462b0a7-59a2-49f7-95ed-b1f441dbd228"
     var identity: String = "undefined"
+    var responseDetail: [String:AnyObject] = [:]
+    var recommendedProduct: [[String:AnyObject]] = []
 
+    @IBOutlet var userNote: UILabel!
+    @IBOutlet var stylistNote: UITextView!
     @IBAction func finishResponding(sender: AnyObject) {
         performSegueWithIdentifier("respondToHome", sender: self)
     }
@@ -28,9 +31,28 @@ class RespondViewController: UIViewController,UITableViewDelegate,UITableViewDat
         }
     }
     
+    @IBOutlet var userDefaultImage: UIImageView!
+    @IBOutlet var requestSpecificImage: UIImageView!
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationController?.navigationBarHidden = true
+        
+        if responseDetail["stylistNote"] as? String != "" {
+            stylistNote.text = responseDetail["stylistNote"] as? String
+        }
+        
+        if responseDetail["userNote"] as? String != "" {
+            userNote.text = responseDetail["userNote"] as? String
+        }
+        
+        if responseDetail["userDefaultImage"] != nil {
+            userDefaultImage.image = UIImage(data: (responseDetail["userDefaultImage"] as? NSData)!)
+        }
+        
+        if responseDetail["requestSpecificImage"] != nil {
+            requestSpecificImage.image = UIImage(data: (responseDetail["requestSpecificImage"] as? NSData)!)
+        }
+        
         
         //activity indicator
         activityIndicator = UIActivityIndicatorView(frame: self.view.bounds)
@@ -42,8 +64,32 @@ class RespondViewController: UIViewController,UITableViewDelegate,UITableViewDat
 
         //gesture to dismiss keyboard
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ViewController.dismissKeyboard))
+        tap.cancelsTouchesInView = false
         view.addGestureRecognizer(tap)
 
+        let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(ProductDetailViewController.imageTapped(_:)))
+        
+        userDefaultImage.userInteractionEnabled = true
+        userDefaultImage.addGestureRecognizer(tapRecognizer)
+        
+        requestSpecificImage.userInteractionEnabled = true
+        requestSpecificImage.addGestureRecognizer(tapRecognizer)
+    }
+    
+    func imageTapped(sender: UITapGestureRecognizer) {
+        let imageView = sender.view as! UIImageView
+        let newImageView = UIImageView(image: imageView.image)
+        newImageView.frame = self.view.frame
+        newImageView.backgroundColor = .blackColor()
+        newImageView.contentMode = .ScaleAspectFit
+        newImageView.userInteractionEnabled = true
+        let tap = UITapGestureRecognizer(target: self, action: #selector(ProductDetailViewController.dismissFullscreenImage(_:)))
+        newImageView.addGestureRecognizer(tap)
+        self.view.addSubview(newImageView)
+    }
+    
+    func dismissFullscreenImage(sender: UITapGestureRecognizer) {
+        sender.view?.removeFromSuperview()
     }
 
     override func didReceiveMemoryWarning() {
@@ -56,7 +102,7 @@ class RespondViewController: UIViewController,UITableViewDelegate,UITableViewDat
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return productDetail.count
+        return recommendedProduct.count
     }
     
     func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
@@ -65,7 +111,7 @@ class RespondViewController: UIViewController,UITableViewDelegate,UITableViewDat
     
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if (editingStyle == UITableViewCellEditingStyle.Delete) {
-            productDetail.removeAtIndex(indexPath.row)
+            recommendedProduct.removeAtIndex(indexPath.row)
             tableView.reloadData()
         }
     }
@@ -76,8 +122,8 @@ class RespondViewController: UIViewController,UITableViewDelegate,UITableViewDat
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("cellForRespond", forIndexPath: indexPath)
-        cell.textLabel?.text = productDetail[indexPath.row]["productName"] as? String
-        cell.detailTextLabel?.text = productDetail[indexPath.row]["productBrand"] as? String
+        cell.textLabel?.text = recommendedProduct[indexPath.row]["productName"] as? String
+        cell.detailTextLabel?.text = recommendedProduct[indexPath.row]["productBrand"] as? String
         return cell
     }
 
@@ -93,6 +139,7 @@ class RespondViewController: UIViewController,UITableViewDelegate,UITableViewDat
         }
         
         if segue.identifier == "respondToSearch" {
+            responseDetail["stylistNote"] = stylistNote.text
             let destinationViewController = segue.destinationViewController as! UINavigationController
             let productSearchReultController = destinationViewController.topViewController as! ProductSearchResultTableViewController
             productSearchReultController.userId = userId
@@ -100,6 +147,8 @@ class RespondViewController: UIViewController,UITableViewDelegate,UITableViewDat
             productSearchReultController.authToken = authToken
             productSearchReultController.identity = identity
             productSearchReultController.searchToAdd = true
+            productSearchReultController.responseDetail = responseDetail
+            productSearchReultController.recommendedProduct = recommendedProduct
         }
 
         if segue.identifier == "respondToProductDetail" {
@@ -108,7 +157,8 @@ class RespondViewController: UIViewController,UITableViewDelegate,UITableViewDat
             destinationViewController.identity = identity
             destinationViewController.userId = userId
             destinationViewController.productIndex = sender as! Int
-            destinationViewController.productDetail = productDetail
+            destinationViewController.recommendedProduct = recommendedProduct
+            destinationViewController.responseDetail = responseDetail
         }
     }
     

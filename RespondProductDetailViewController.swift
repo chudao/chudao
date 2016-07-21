@@ -14,8 +14,8 @@ class RespondProductDetailViewController: UIViewController {
     var identity: String = "undefined"
     var authToken: String = "undefined"
     var productIndex: Int = -1
-    var productDetail: [[String:AnyObject]] = []
-    
+    var recommendedProduct: [[String:AnyObject]] = []
+    var responseDetail: [String:AnyObject] = [:]
 
     @IBOutlet var productImage: UIImageView!
     @IBOutlet var productBrand: UILabel!
@@ -31,15 +31,36 @@ class RespondProductDetailViewController: UIViewController {
         print("RespondProductDetailpage userid: \(userId)")
         print("RespondProductDetailpage identity: \(identity)")
         
-        let image = UIImage(data: (productDetail[productIndex]["productImage"] as? NSData)!)
+        let image = UIImage(data: (recommendedProduct[productIndex]["productImage"] as? NSData)!)
         productImage.image = image
         productImage.clipsToBounds = true
         productImage.contentMode = UIViewContentMode.ScaleAspectFit
         
-        productBrand.text = productDetail[productIndex]["productBrand"] as? String
-        productName.text = productDetail[productIndex]["productName"] as? String
-        productDescription.text = productDetail[productIndex]["productDescription"] as? String
+        productBrand.text = recommendedProduct[productIndex]["productBrand"] as? String
+        productName.text = recommendedProduct[productIndex]["productName"] as? String
+        productDescription.text = recommendedProduct[productIndex]["productDescription"] as? String
         
+        
+        let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(ProductDetailViewController.imageTapped(_:)))
+        
+        productImage.userInteractionEnabled = true
+        productImage.addGestureRecognizer(tapRecognizer)
+    }
+    
+    func imageTapped(sender: UITapGestureRecognizer) {
+        let imageView = sender.view as! UIImageView
+        let newImageView = UIImageView(image: imageView.image)
+        newImageView.frame = self.view.frame
+        newImageView.backgroundColor = .blackColor()
+        newImageView.contentMode = .ScaleAspectFit
+        newImageView.userInteractionEnabled = true
+        let tap = UITapGestureRecognizer(target: self, action: #selector(ProductDetailViewController.dismissFullscreenImage(_:)))
+        newImageView.addGestureRecognizer(tap)
+        self.view.addSubview(newImageView)
+    }
+    
+    func dismissFullscreenImage(sender: UITapGestureRecognizer) {
+        sender.view?.removeFromSuperview()
     }
 
     override func didReceiveMemoryWarning() {
@@ -52,7 +73,8 @@ class RespondProductDetailViewController: UIViewController {
             destinationViewController.userId = userId
             destinationViewController.authToken = authToken
             destinationViewController.identity = identity
-            destinationViewController.productDetail = productDetail
+            destinationViewController.recommendedProduct = recommendedProduct
+            destinationViewController.responseDetail = responseDetail
        }
     }
 

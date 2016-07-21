@@ -19,18 +19,13 @@ class ProductDetailViewController: UIViewController {
     var productDescription: String = ""
     var authToken: String = "undefined"
     var searchToAdd: Bool = false
-    var productDetail: [[String:AnyObject]] = []
     var activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView()
     var imageAsNSData: NSData = NSData()
+    var responseDetail: [String:AnyObject] = [:]
+    var recommendedProduct: [[String:AnyObject]] = []
 
     @IBOutlet var purchaseButton: UIButton!
-
-    @IBAction func done(sender: AnyObject) {
-         performSegueWithIdentifier("productDetailToSearchResult", sender: userId)
-    }
-    
     @IBOutlet var productImage: UIImageView!
-
     @IBOutlet var brand: UILabel!
     @IBOutlet var name: UILabel!
     @IBOutlet var descriptionInfo: UILabel!
@@ -65,7 +60,26 @@ class ProductDetailViewController: UIViewController {
         
         queryFileKey(productId)
         
-        
+        productImage.userInteractionEnabled = true
+        let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(ProductDetailViewController.imageTapped(_:)))
+        productImage.addGestureRecognizer(tapRecognizer)
+    
+    }
+    
+    func imageTapped(sender: UITapGestureRecognizer) {
+        let imageView = sender.view as! UIImageView
+        let newImageView = UIImageView(image: imageView.image)
+        newImageView.frame = self.view.frame
+        newImageView.backgroundColor = .blackColor()
+        newImageView.contentMode = .ScaleAspectFit
+        newImageView.userInteractionEnabled = true
+        let tap = UITapGestureRecognizer(target: self, action: #selector(ProductDetailViewController.dismissFullscreenImage(_:)))
+        newImageView.addGestureRecognizer(tap)
+        self.view.addSubview(newImageView)
+    }
+    
+    func dismissFullscreenImage(sender: UITapGestureRecognizer) {
+        sender.view?.removeFromSuperview()
     }
 
     override func didReceiveMemoryWarning() {
@@ -218,7 +232,6 @@ class ProductDetailViewController: UIViewController {
             destinationViewController.authToken = authToken
             destinationViewController.identity = identity
             destinationViewController.searchToAdd = searchToAdd
-            destinationViewController.productDetail = productDetail
         }
         
         if segue.identifier == "addToRespond" {
@@ -226,7 +239,9 @@ class ProductDetailViewController: UIViewController {
             destinationViewController.userId = userId
             destinationViewController.authToken = authToken
             destinationViewController.identity = identity
-            destinationViewController.productDetail.append(["productId":productId,"productName":productName,"productBrand":productBrand,"productDescription":productDescription,"productImage":imageAsNSData])
+            recommendedProduct.append(["productId":productId,"productName":productName,"productBrand":productBrand,"productDescription":productDescription,"productImage":imageAsNSData])
+            destinationViewController.recommendedProduct = recommendedProduct
+            destinationViewController.responseDetail = responseDetail
         }
     }
 }
