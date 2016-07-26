@@ -11,10 +11,6 @@ import UIKit
 class SignupViewController: UIViewController,UIScrollViewDelegate,UITextFieldDelegate,UINavigationControllerDelegate, UIImagePickerControllerDelegate {
 
     @IBOutlet var image: UIImageView!
-    @IBOutlet var isUserButton: CheckBox!
-    @IBOutlet var isStylistButton: CheckBox!
-
-    
     
     @IBAction func chooseExistingPhoto(sender: AnyObject) {
         if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.PhotoLibrary) {
@@ -44,18 +40,6 @@ class SignupViewController: UIViewController,UIScrollViewDelegate,UITextFieldDel
     }
     
     
-    @IBAction func isUser(sender: AnyObject) {
-        if isUserButton.isChecked == true {
-            age.hidden = true
-            gender.hidden = true
-        }else{
-            age.hidden = false
-            gender.hidden = false
-        }
-    }
-    @IBAction func isStylist(sender: AnyObject) {
-        identity = "stylist"
-    }
     
     @IBAction func signup(sender: AnyObject) {
         if username.text == "" || email.text == "" || password.text == "" || password.text == "" {
@@ -87,11 +71,8 @@ class SignupViewController: UIViewController,UIScrollViewDelegate,UITextFieldDel
     override func viewDidLoad() {
         super.viewDidLoad()
         scrollView.delegate = self
-        scrollView.scrollEnabled = true;
-        scrollView.contentSize = CGSize(width:self.view.frame.width, height:2000.0)
-        
-        age.hidden = true
-        gender.hidden = true
+        //scrollView.scrollEnabled = true;
+        //scrollView.contentSize = CGSize(width:self.view.frame.width, height:2000.0)
         
         age.delegate=self
         username.delegate=self

@@ -18,14 +18,9 @@ class ProductSearchResultTableViewController: UITableViewController {
     var recommendedProduct: [[String:AnyObject]] = []
     var authToken: String = "undefined"
     var identity: String = "undefined"
-    var searchToAdd: Bool = false
     
     @IBAction func cancel(sender: AnyObject) {
-        if searchToAdd {
-            performSegueWithIdentifier("searchResultToRespond", sender: self)
-        }else{
-            performSegueWithIdentifier("searchResultToHome", sender:self)
-        }
+        performSegueWithIdentifier("searchResultToHome", sender:self)
     }
     
     override func viewDidLoad() {
@@ -53,9 +48,7 @@ class ProductSearchResultTableViewController: UITableViewController {
     }
     
     override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
+        super.didReceiveMemoryWarning()    }
     
     // MARK: - Table view data source
     
@@ -236,7 +229,6 @@ class ProductSearchResultTableViewController: UITableViewController {
             destinationViewController.productId = sender![4] as! String
             destinationViewController.identity = identity
             destinationViewController.authToken = authToken
-            destinationViewController.searchToAdd = searchToAdd
             destinationViewController.recommendedProduct = recommendedProduct
             destinationViewController.responseDetail = responseDetail
         }
@@ -247,15 +239,6 @@ class ProductSearchResultTableViewController: UITableViewController {
             destinationTab.userId = userId
             destinationTab.identity = identity
             destinationTab.authToken = authToken
-        }
-        
-        if segue.identifier == "searchResultToRespond" {
-            let destinationViewController = segue.destinationViewController as! RespondViewController
-            destinationViewController.userId = userId
-            destinationViewController.authToken = authToken
-            destinationViewController.identity = identity
-            destinationViewController.responseDetail = responseDetail
-            destinationViewController.recommendedProduct = recommendedProduct
         }
     }
     

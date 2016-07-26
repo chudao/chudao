@@ -18,7 +18,6 @@ class ProductDetailViewController: UIViewController {
     var productLink: String = ""
     var productDescription: String = ""
     var authToken: String = "undefined"
-    var searchToAdd: Bool = false
     var activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView()
     var imageAsNSData: NSData = NSData()
     var responseDetail: [String:AnyObject] = [:]
@@ -30,11 +29,7 @@ class ProductDetailViewController: UIViewController {
     @IBOutlet var name: UILabel!
     @IBOutlet var descriptionInfo: UILabel!
     @IBAction func purchase(sender: AnyObject) {
-        if searchToAdd {
-            performSegueWithIdentifier("addToRespond", sender: self)
-        }else{
             displayAlert("Redirecting", message: "You are being redirected to the merchandiser's website for purchase", enterMoreInfo: true)
-        }
     }
     
     override func viewDidLoad() {
@@ -45,10 +40,6 @@ class ProductDetailViewController: UIViewController {
         name.text = productName
         productImage.clipsToBounds = true
         productImage.contentMode = UIViewContentMode.ScaleAspectFill
-        
-        if searchToAdd {
-            purchaseButton.setTitle("Add", forState: .Normal)
-        }
 
         //activity indicator
         activityIndicator = UIActivityIndicatorView(frame: self.view.bounds)
@@ -231,17 +222,6 @@ class ProductDetailViewController: UIViewController {
             destinationViewController.userId = sender as! Int
             destinationViewController.authToken = authToken
             destinationViewController.identity = identity
-            destinationViewController.searchToAdd = searchToAdd
-        }
-        
-        if segue.identifier == "addToRespond" {
-            let destinationViewController = segue.destinationViewController as! RespondViewController
-            destinationViewController.userId = userId
-            destinationViewController.authToken = authToken
-            destinationViewController.identity = identity
-            recommendedProduct.append(["productId":productId,"productName":productName,"productBrand":productBrand,"productDescription":productDescription,"productImage":imageAsNSData])
-            destinationViewController.recommendedProduct = recommendedProduct
-            destinationViewController.responseDetail = responseDetail
         }
     }
 }

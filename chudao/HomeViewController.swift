@@ -49,11 +49,6 @@ class HomeViewController: UIViewController,UITextFieldDelegate, UISearchBarDeleg
         
         searchRequirment.delegate = self
         
-        if identity != "user" {
-            newRequestButton.enabled = false
-            newRequestButton.tintColor = UIColor.clearColor();
-        }
-        
         //gesture to dismiss keyboard
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ViewController.dismissKeyboard))
         view.addGestureRecognizer(tap)
