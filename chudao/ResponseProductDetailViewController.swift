@@ -17,7 +17,7 @@ class ResponseProductDetailViewController: UIViewController {
     var requestDetail: [String:AnyObject] = [:]
     var responseDetail: [String:AnyObject] = [:]
     var requestSpecificImageAsData = NSData()
-    var userImageAsData = NSData()
+    var userDefaultImageAsData = NSData()
     var stylistImageAsData = NSData()
     var prodcutIndex: Int = -1
     var activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView()
@@ -223,7 +223,8 @@ class ResponseProductDetailViewController: UIViewController {
             destinationViewController.identity = identity
             destinationViewController.productDetail = productDetail
             destinationViewController.requestDetail = requestDetail
-            destinationViewController.userImageAsData = userImageAsData
+            destinationViewController.userDefaultImageAsData = userDefaultImageAsData
+            destinationViewController.stylistImageAsData = stylistImageAsData
             destinationViewController.responseDetail = responseDetail
             destinationViewController.requestSpecificImageAsData = requestSpecificImageAsData
         }

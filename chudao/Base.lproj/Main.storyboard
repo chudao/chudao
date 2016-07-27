@@ -103,7 +103,7 @@
                         <viewControllerLayoutGuide type="bottom" id="Vrw-DF-bik"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="US6-HX-yE3">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cSh-0q-qnr">
@@ -229,7 +229,7 @@
                                                 <rect key="frame" x="0.0" y="28" width="359" height="44"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="EHX-Ge-AbK" id="hCE-vj-buc">
-                                                    <rect key="frame" x="0.0" y="0.0" width="359" height="44"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="359" height="43.5"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                 </tableViewCellContentView>
                                             </tableViewCell>
@@ -904,6 +904,7 @@
             <objects>
                 <navigationController title="Product search result navigation" automaticallyAdjustsScrollViewInsets="NO" id="WIH-yi-0ZC" customClass="ProductSearchResultNavigationViewController" customModule="chudao" customModuleProvider="target" sceneMemberID="viewController">
                     <toolbarItems/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="pIb-v5-VHa">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -923,6 +924,7 @@
                 <navigationController title="Request navigation" automaticallyAdjustsScrollViewInsets="NO" id="Nqy-21-LiO" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Request" id="Ii7-uF-MQH"/>
                     <toolbarItems/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="9CP-7A-tcq">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -938,9 +940,9 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="dIv-zf-onl"/>
         <segue reference="Kkb-ez-fbr"/>
         <segue reference="d73-7Y-Gnu"/>
-        <segue reference="wCM-Zh-Nqz"/>
+        <segue reference="dIv-zf-onl"/>
+        <segue reference="Uj3-OS-bzs"/>
     </inferredMetricsTieBreakers>
 </document>

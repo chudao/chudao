@@ -17,7 +17,7 @@ class ResponseViewController: UIViewController, UIScrollViewDelegate, UITableVie
     var responseDetail: [String:AnyObject] = [:]
     var productDetail: [[String:AnyObject]] = []
     var requestSpecificImageAsData = NSData()
-    var userImageAsData = NSData()
+    var userDefaultImageAsData = NSData()
     var stylistImageAsData = NSData()
     var activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView()
     @IBOutlet var tableView: UITableView!
@@ -36,6 +36,8 @@ class ResponseViewController: UIViewController, UIScrollViewDelegate, UITableVie
         scrollView.scrollEnabled = true
         scrollView.sizeToFit()
         scrollView.contentSize = CGSize(width:self.view.frame.width, height:950.0)
+
+
         
         if requestDetail["user-message"] as? String != "" {
             userNote.text = requestDetail["user-message"] as! String
@@ -45,6 +47,20 @@ class ResponseViewController: UIViewController, UIScrollViewDelegate, UITableVie
             if requestDetail["file-key"] as? String != "" {
                 downLoadImage((requestDetail["file-key"] as? String)!, placeHolder: "requestSpecificImage")
             }
+        }else{
+            self.requestSpecificImage.image = UIImage(data: requestSpecificImageAsData)
+        }
+        
+        if stylistImageAsData != NSData() {
+            self.stylistImage.image = UIImage(data: stylistImageAsData)
+        }
+
+        if userDefaultImageAsData != NSData() {
+            self.userDefaultImage.image = UIImage(data: userDefaultImageAsData)
+        }
+
+        if responseDetail.count == 0 {
+            fetchResponse(requestDetail["response-id"] as! String)
         }
         
         //activity indicator
@@ -59,12 +75,18 @@ class ResponseViewController: UIViewController, UIScrollViewDelegate, UITableVie
         let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(ProductDetailViewController.imageTapped(_:)))
         userDefaultImage.userInteractionEnabled = true
         userDefaultImage.addGestureRecognizer(tapRecognizer)
+        userDefaultImage.clipsToBounds = true
+        userDefaultImage.contentMode = UIViewContentMode.ScaleAspectFit
         
         requestSpecificImage.userInteractionEnabled = true
         requestSpecificImage.addGestureRecognizer(tapRecognizer)
+        requestSpecificImage.clipsToBounds = true
+        requestSpecificImage.contentMode = UIViewContentMode.ScaleAspectFit
         
         stylistImage.userInteractionEnabled = true
         stylistImage.addGestureRecognizer(tapRecognizer)
+        requestSpecificImage.clipsToBounds = true
+        requestSpecificImage.contentMode = UIViewContentMode.ScaleAspectFit
         
         
     }
@@ -88,15 +110,142 @@ class ResponseViewController: UIViewController, UIScrollViewDelegate, UITableVie
     
     //download request image
     func downLoadImage(fileKey: String, placeHolder: String){
+        //activate activity indicator and disable user interaction
+        dispatch_async(dispatch_get_main_queue()) {
+            self.activityIndicator.startAnimating()
+            UIApplication.sharedApplication().beginIgnoringInteractionEvents()
+        }
         
+        // Setup the session to make REST POST call
+        let postEndpoint: String = "http://chudao.herokuapp.com/binary/download"
+        let url = NSURL(string: postEndpoint)!
+        let session = NSURLSession.sharedSession()
+        let postParams : [String: String] = ["file-name": fileKey]
+        
+        // Create the request
+        let request = NSMutableURLRequest(URL: url)
+        request.HTTPMethod = "POST"
+        request.setValue(self.authToken, forHTTPHeaderField: "X-Auth-Token")
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        
+        do {
+            request.HTTPBody = try NSJSONSerialization.dataWithJSONObject(postParams, options: NSJSONWritingOptions())
+            print("Request: \(postParams)")
+        } catch {
+            print("Error")
+        }
+        
+        // Make the POST call and handle it in a completion handler
+        session.dataTaskWithRequest(request) { (data: NSData?, response: NSURLResponse?, error: NSError?) in
+            //disable activiy indicator and re-activate user interaction
+            dispatch_async(dispatch_get_main_queue()) {
+                self.activityIndicator.stopAnimating()
+                UIApplication.sharedApplication().endIgnoringInteractionEvents()
+            }
+            
+            // Make sure we get an OK response
+            guard let realResponse = response as? NSHTTPURLResponse where
+                realResponse.statusCode == 200 else {
+                    print("Not a 200 Response, code: \((response as? NSHTTPURLResponse)?.statusCode)")
+                    return
+            }
+            print("Response \(response)")
+            
+            if let image = UIImage(data: data!){
+                dispatch_async(dispatch_get_main_queue()) {
+                    switch (placeHolder){
+                    case ("requestSpecificImage"):
+                        self.requestSpecificImageAsData = data!
+                        self.requestSpecificImage.image = image
+                    case ("stylistImage"):
+                        self.stylistImageAsData = data!
+                        self.stylistImage.image = image
+                    case ("userDefaultImage"):
+                        self.userDefaultImageAsData = data!
+                        self.userDefaultImage.image = image
+                    default: break
+                    }
+                }
+            }else{
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.displayAlert("Unable to display image", message: "Sorry, we are having issue displaying the image")
+                }
+            }
+        }.resume()
     }
     
     
     //fetch response detail
     func fetchResponse(responseId: String){
+        //activate activity indicator and disable user interaction
+        dispatch_async(dispatch_get_main_queue()) {
+            self.activityIndicator.startAnimating()
+            UIApplication.sharedApplication().beginIgnoringInteractionEvents()
+        }
         
+        // Setup the session to make REST POST call
+        let postEndpoint: String = "http://chudao.herokuapp.com/query/XXX"
+        let url = NSURL(string: postEndpoint)!
+        let session = NSURLSession.sharedSession()
+        let postParams : [String: String] = ["response-ids": responseId]
+        
+        // Create the request
+        let request = NSMutableURLRequest(URL: url)
+        request.HTTPMethod = "POST"
+        request.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-Type")
+        request.setValue(self.authToken, forHTTPHeaderField: "X-Auth-Token")
+        
+        do {
+            request.HTTPBody = try NSJSONSerialization.dataWithJSONObject(postParams, options: NSJSONWritingOptions())
+            print("Request: \(postParams)")
+        } catch {
+            print("Error")
+        }
+        
+        // Make the POST call and handle it in a completion handler
+        session.dataTaskWithRequest(request) { (data: NSData?, response: NSURLResponse?, error: NSError?) in
+            //disable activiy indicator and re-activate user interaction
+            dispatch_async(dispatch_get_main_queue()) {
+                self.activityIndicator.stopAnimating()
+                UIApplication.sharedApplication().endIgnoringInteractionEvents()
+            }
+            
+            // Make sure we get an OK response
+            guard let realResponse = response as? NSHTTPURLResponse where
+                realResponse.statusCode == 200 else {
+                    print("Response code: \((response as? NSHTTPURLResponse)?.statusCode)")
+                    return
+            }
+            
+            // Read the JSON
+            do{
+                guard let jsonResponse = try NSJSONSerialization.JSONObjectWithData(data!, options: []) as? [String: AnyObject] else{
+                    print("Error reading JSON data")
+                    return
+                }
+                print(jsonResponse)
+                if jsonResponse["response-code"]! as! String == "040" {
+                    let response = jsonResponse["response-data"] as? [String:AnyObject]
+                    self.responseDetail = response!
+                    dispatch_async(dispatch_get_main_queue()) {
+                        if self.responseDetail["user-message"] as! String != "" {
+                            self.stylistNote.text = self.responseDetail["user-message"] as! String
+                        }
+                    }
+                    self.downLoadImage(self.responseDetail["file-key"] as! String, placeHolder: "stylistImage")
+                    self.queryByID(self.responseDetail["product-id"]!.componentsJoinedByString(","))
+                }else{
+                    dispatch_async(dispatch_get_main_queue()) {
+                        self.displayAlert("Unable to query", message: jsonResponse["response-message"]! as! String)
+                    }
+                }
+            }catch  {
+                print("error trying to convert data to JSON")
+                return
+            }
+        }.resume()
     }
-    
     
     //Qury by productID for detail
     func queryByID(productId: String){
@@ -204,7 +353,7 @@ class ResponseViewController: UIViewController, UIScrollViewDelegate, UITableVie
             destinationViewController.identity = identity
             destinationViewController.productDetail = productDetail
             destinationViewController.requestDetail = requestDetail
-            destinationViewController.userImageAsData = userImageAsData
+            destinationViewController.userDefaultImageAsData = userDefaultImageAsData
             destinationViewController.stylistImageAsData = stylistImageAsData
             destinationViewController.requestSpecificImageAsData = requestSpecificImageAsData
             destinationViewController.responseDetail = responseDetail
