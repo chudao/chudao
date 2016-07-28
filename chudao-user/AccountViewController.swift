@@ -10,7 +10,10 @@ import UIKit
 
 class AccountViewController: UIViewController {
 
-    @IBOutlet var submittedRecommendationButton: UIButton!
+
+    @IBAction func contact(sender: AnyObject) {
+        performSegueWithIdentifier("accounToContanct", sender: self)
+    }
     @IBAction func logout(sender: AnyObject) {
         performSegueWithIdentifier("accountToHome", sender: self)
     }
@@ -31,10 +34,6 @@ class AccountViewController: UIViewController {
         
         print("Accountpage userid: \(sharedUserInfo.userId)")
         print("Accountpage identity: \(sharedUserInfo.identity)")
-        
-        if sharedUserInfo.identity != "stylist" {
-            submittedRecommendationButton.hidden = true
-        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -44,6 +43,13 @@ class AccountViewController: UIViewController {
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "accountToSuggest" {
             let detinationController = segue.destinationViewController as! SuggestProductViewController
+            detinationController.userId = sharedUserInfo.userId
+            detinationController.identity = sharedUserInfo.identity
+            detinationController.authToken = sharedUserInfo.authToken
+        }
+        
+        if segue.identifier == "accountToContact" {
+            let detinationController = segue.destinationViewController as! ContactViewController
             detinationController.userId = sharedUserInfo.userId
             detinationController.identity = sharedUserInfo.identity
             detinationController.authToken = sharedUserInfo.authToken

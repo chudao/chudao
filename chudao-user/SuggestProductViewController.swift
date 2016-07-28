@@ -145,11 +145,13 @@ class SuggestProductViewController: UIViewController, UITextFieldDelegate, UITex
 
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if  segue.identifier == "suggestToHome" {
-            let destinationViewController = segue.destinationViewController as! UITabBarController
-            let destinationTab = destinationViewController.viewControllers?.first as! HomeViewController
-            destinationTab.userId = self.userId
-            destinationTab.identity = self.identity
-            destinationTab.authToken = self.authToken
+            let destinationViewController = segue.destinationViewController as! TabBarViewController
+            var sharedUserInfo = SharedUserInfo()
+            sharedUserInfo = destinationViewController.sharedUserInfo
+            sharedUserInfo.userId = userId
+            sharedUserInfo.identity = identity
+            sharedUserInfo.authToken = authToken
+            destinationViewController.switchTo = "2"
         }
     }
 }

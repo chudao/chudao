@@ -19,8 +19,8 @@ class TabBarViewController: UITabBarController {
     }
     
     override func viewWillAppear(animated: Bool) {
-        if switchTo == "3"{
-            self.selectedIndex = 2
+        if switchTo == "2"{
+            self.selectedIndex = 1
         }
     }
     

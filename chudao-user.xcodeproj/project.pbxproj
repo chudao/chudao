@@ -10,6 +10,7 @@
 		E50FF3AC1D405AA400406C08 /* ResponseProductDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50FF3AB1D405AA400406C08 /* ResponseProductDetailViewController.swift */; };
 		E50FF3AE1D4084AB00406C08 /* ResponseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50FF3AD1D4084AB00406C08 /* ResponseViewController.swift */; };
 		E50FF3B21D4085D400406C08 /* SharedUserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50FF3B01D4085D400406C08 /* SharedUserInfo.swift */; };
+		E58B21941D49A3FB0038AD42 /* ContactViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E58B21931D49A3FB0038AD42 /* ContactViewController.swift */; };
 		E5C7A9241D141EF00019008A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5C7A9231D141EF00019008A /* AppDelegate.swift */; };
 		E5C7A9261D141EF00019008A /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5C7A9251D141EF00019008A /* ViewController.swift */; };
 		E5C7A9291D141EF00019008A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E5C7A9271D141EF00019008A /* Main.storyboard */; };
@@ -26,7 +27,6 @@
 		E5EAFA2A1D34D04A00846978 /* SuggestProductViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5EAFA291D34D04A00846978 /* SuggestProductViewController.swift */; };
 		E5EAFA2C1D37301E00846978 /* AccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5EAFA2B1D37301E00846978 /* AccountViewController.swift */; };
 		E5EAFA2E1D37340C00846978 /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5EAFA2D1D37340C00846978 /* TabBarViewController.swift */; };
-		E5EAFA301D37352900846978 /* ProductSearchResultNavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5EAFA2F1D37352900846978 /* ProductSearchResultNavigationViewController.swift */; };
 		E5EAFA361D38865100846978 /* RequestTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5EAFA351D38865100846978 /* RequestTableViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -51,6 +51,7 @@
 		E50FF3AB1D405AA400406C08 /* ResponseProductDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResponseProductDetailViewController.swift; sourceTree = "<group>"; };
 		E50FF3AD1D4084AB00406C08 /* ResponseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResponseViewController.swift; sourceTree = "<group>"; };
 		E50FF3B01D4085D400406C08 /* SharedUserInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SharedUserInfo.swift; sourceTree = "<group>"; };
+		E58B21931D49A3FB0038AD42 /* ContactViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactViewController.swift; sourceTree = "<group>"; };
 		E5C7A9201D141EF00019008A /* chudao.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = chudao.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E5C7A9231D141EF00019008A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E5C7A9251D141EF00019008A /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -73,7 +74,6 @@
 		E5EAFA291D34D04A00846978 /* SuggestProductViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SuggestProductViewController.swift; sourceTree = "<group>"; };
 		E5EAFA2B1D37301E00846978 /* AccountViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountViewController.swift; sourceTree = "<group>"; };
 		E5EAFA2D1D37340C00846978 /* TabBarViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
-		E5EAFA2F1D37352900846978 /* ProductSearchResultNavigationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductSearchResultNavigationViewController.swift; sourceTree = "<group>"; };
 		E5EAFA351D38865100846978 /* RequestTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestTableViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -130,9 +130,9 @@
 				E5C7A9231D141EF00019008A /* AppDelegate.swift */,
 				E5C7A9251D141EF00019008A /* ViewController.swift */,
 				E5C7A9271D141EF00019008A /* Main.storyboard */,
+				E58B21931D49A3FB0038AD42 /* ContactViewController.swift */,
 				E50FF3AB1D405AA400406C08 /* ResponseProductDetailViewController.swift */,
 				E5EAFA351D38865100846978 /* RequestTableViewController.swift */,
-				E5EAFA2F1D37352900846978 /* ProductSearchResultNavigationViewController.swift */,
 				E5EAFA2D1D37340C00846978 /* TabBarViewController.swift */,
 				E5EAFA2B1D37301E00846978 /* AccountViewController.swift */,
 				E5EAFA291D34D04A00846978 /* SuggestProductViewController.swift */,
@@ -303,9 +303,9 @@
 			files = (
 				E5C7A9261D141EF00019008A /* ViewController.swift in Sources */,
 				E5C7A92C1D141EF00019008A /* chudao.xcdatamodeld in Sources */,
+				E58B21941D49A3FB0038AD42 /* ContactViewController.swift in Sources */,
 				E5EAFA281D31263A00846978 /* ProductSearchResultTableViewController.swift in Sources */,
 				E5EAFA261D310AF900846978 /* ProductDetailViewController.swift in Sources */,
-				E5EAFA301D37352900846978 /* ProductSearchResultNavigationViewController.swift in Sources */,
 				E5EAFA2E1D37340C00846978 /* TabBarViewController.swift in Sources */,
 				E50FF3AE1D4084AB00406C08 /* ResponseViewController.swift in Sources */,
 				E5EAFA361D38865100846978 /* RequestTableViewController.swift in Sources */,
