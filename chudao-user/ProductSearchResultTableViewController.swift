@@ -18,6 +18,9 @@ class ProductSearchResultTableViewController: UITableViewController {
     var recommendedProduct: [[String:AnyObject]] = []
     var authToken: String = "undefined"
     var identity: String = "undefined"
+    var username: String = "undefined"
+    var password: String = "undefined"
+    
     
     @IBAction func cancel(sender: AnyObject) {
         performSegueWithIdentifier("searchResultToHome", sender:self)
@@ -50,7 +53,6 @@ class ProductSearchResultTableViewController: UITableViewController {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()    }
     
-    // MARK: - Table view data source
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
@@ -206,10 +208,14 @@ class ProductSearchResultTableViewController: UITableViewController {
     
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath)
-        cell.textLabel?.text = productDetail[indexPath.row]["ProductName"] as? String
+        var cell = tableView.dequeueReusableCellWithIdentifier("cell")
+        if cell == nil {
+            cell = UITableViewCell(style: .Subtitle, reuseIdentifier: "cell")
+        }
         
-        return cell
+        cell!.textLabel?.text = productDetail[indexPath.row]["ProductName"] as? String
+        cell!.detailTextLabel?.text = productDetail[indexPath.row]["ProductBrand"] as? String
+        return cell!
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
@@ -229,6 +235,8 @@ class ProductSearchResultTableViewController: UITableViewController {
             destinationViewController.productId = sender![4] as! String
             destinationViewController.identity = identity
             destinationViewController.authToken = authToken
+            destinationViewController.username = username
+            destinationViewController.password = password
             destinationViewController.recommendedProduct = recommendedProduct
             destinationViewController.responseDetail = responseDetail
         }
@@ -239,6 +247,8 @@ class ProductSearchResultTableViewController: UITableViewController {
             destinationTab.userId = userId
             destinationTab.identity = identity
             destinationTab.authToken = authToken
+            destinationTab.username = username
+            destinationTab.password = password
         }
     }
     

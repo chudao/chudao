@@ -12,4 +12,8 @@ class SharedUserInfo: NSObject {
     var userId: Int = -1
     var identity: String = "undefined"
     var authToken: String = "undefined"
+    var username: String = "undefined"
+    var password: String = "undefined"
+    var age: String = "undefined"
+    var gender: String = "undefined"
 }

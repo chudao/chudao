@@ -48,10 +48,10 @@ class SignupViewController: UIViewController,UIScrollViewDelegate,UITextFieldDel
             displayAlert("Email mismatch", message: "Please re-enter your email", enterMoreInfo: false)
         }else if password.text != confirmPassword.text {
             displayAlert("Password mismatch", message: "Please re-enter your password", enterMoreInfo: false)
-        }else{
-            dispatch_async(dispatch_get_main_queue()) {
-                self.displayAlert("Complete info will improve your experience", message: "Stylist could better recommend for you if you provide more information.  Do you still want to continue?", enterMoreInfo: true)
-            }
+        }else if age.text == "" || image.image == nil {
+            displayAlert("Complete info will improve your experience", message: "Stylist could better recommend for you if you provide more information.  Do you still want to continue?", enterMoreInfo: true)
+        }else {
+            register()
         }
     }
     @IBOutlet var scrollView: UIScrollView!
@@ -62,6 +62,8 @@ class SignupViewController: UIViewController,UIScrollViewDelegate,UITextFieldDel
     @IBOutlet var confirmEmail: UITextField!
     @IBOutlet var password: UITextField!
     @IBOutlet var confirmPassword: UITextField!
+    @IBOutlet var existingButton: UIButton!
+    @IBOutlet var newButton: UIButton!
     
     var activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView()
     var userId: Int = -1
@@ -70,6 +72,52 @@ class SignupViewController: UIViewController,UIScrollViewDelegate,UITextFieldDel
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        age.layer.cornerRadius = 8.0
+        age.layer.masksToBounds = true
+        age.layer.borderColor = UIColor( red: 128/255, green: 128/255, blue:128/255, alpha: 1.0 ).CGColor
+        age.layer.borderWidth = 1.0
+        
+        gender.layer.cornerRadius = 8.0
+        gender.layer.masksToBounds = true
+        gender.layer.borderColor = UIColor( red: 128/255, green: 128/255, blue:128/255, alpha: 1.0 ).CGColor
+        gender.layer.borderWidth = 1.0
+        
+        username.layer.cornerRadius = 8.0
+        username.layer.masksToBounds = true
+        username.layer.borderColor = UIColor( red: 128/255, green: 128/255, blue:128/255, alpha: 1.0 ).CGColor
+        username.layer.borderWidth = 1.0
+        
+        email.layer.cornerRadius = 8.0
+        email.layer.masksToBounds = true
+        email.layer.borderColor = UIColor( red: 128/255, green: 128/255, blue:128/255, alpha: 1.0 ).CGColor
+        email.layer.borderWidth = 1.0
+        
+        confirmEmail.layer.cornerRadius = 8.0
+        confirmEmail.layer.masksToBounds = true
+        confirmEmail.layer.borderColor = UIColor( red: 128/255, green: 128/255, blue:128/255, alpha: 1.0 ).CGColor
+        confirmEmail.layer.borderWidth = 1.0
+        
+        password.layer.cornerRadius = 8.0
+        password.layer.masksToBounds = true
+        password.layer.borderColor = UIColor( red: 128/255, green: 128/255, blue:128/255, alpha: 1.0 ).CGColor
+        password.layer.borderWidth = 1.0
+        
+        confirmPassword.layer.cornerRadius = 8.0
+        confirmPassword.layer.masksToBounds = true
+        confirmPassword.layer.borderColor = UIColor( red: 128/255, green: 128/255, blue:128/255, alpha: 1.0 ).CGColor
+        confirmPassword.layer.borderWidth = 1.0
+        
+        existingButton.layer.cornerRadius = 8.0
+        existingButton.layer.masksToBounds = true
+        existingButton.layer.borderColor = UIColor( red: 128/255, green: 128/255, blue:128/255, alpha: 1.0 ).CGColor
+        existingButton.layer.borderWidth = 1.0
+        
+        newButton.layer.cornerRadius = 8.0
+        newButton.layer.masksToBounds = true
+        newButton.layer.borderColor = UIColor( red: 128/255, green: 128/255, blue:128/255, alpha: 1.0 ).CGColor
+        newButton.layer.borderWidth = 1.0
+        
         scrollView.delegate = self
         //scrollView.scrollEnabled = true;
         //scrollView.contentSize = CGSize(width:self.view.frame.width, height:2000.0)
@@ -122,6 +170,7 @@ class SignupViewController: UIViewController,UIScrollViewDelegate,UITextFieldDel
                 self.register()
             }))
         }
+        
         alert.addAction(UIAlertAction(title: title, style: UIAlertActionStyle.Default, handler: nil))
         self.presentViewController(alert, animated: true, completion: nil)
     }
@@ -173,11 +222,11 @@ class SignupViewController: UIViewController,UIScrollViewDelegate,UITextFieldDel
             // Make sure we get an OK response
             guard let realResponse = response as? NSHTTPURLResponse where
                 realResponse.statusCode == 200 else {
-                    print("Not a 200 response, code: \((response as? NSHTTPURLResponse)?.statusCode)")
-                    return
+                    dispatch_async(dispatch_get_main_queue()) {
+                        self.displayAlert("Error contacting server", message: "Not a 200 response, code: \((response as? NSHTTPURLResponse)?.statusCode)", enterMoreInfo: false)
+                    }
+                return
             }
-            
-            self.authToken = ((response as? NSHTTPURLResponse)?.allHeaderFields["X-Auth-Token"] as? String)!
             
             // Read the JSON
             do{
@@ -188,10 +237,8 @@ class SignupViewController: UIViewController,UIScrollViewDelegate,UITextFieldDel
                 print(jsonResponse)
                 if jsonResponse["response-code"]! as! String == "010" {
                     self.userId = jsonResponse["user-id"]! as! Int
+                    self.authToken = ((response as? NSHTTPURLResponse)?.allHeaderFields["X-Auth-Token"] as? String)!
                     self.uploadImage()
-                    dispatch_async(dispatch_get_main_queue()) {
-                        self.performSegueWithIdentifier("signupToHome", sender: self.userId)
-                    }
                 }else{
                     dispatch_async(dispatch_get_main_queue()) {
                         self.displayAlert("Unable to register", message: jsonResponse["response-message"]! as! String, enterMoreInfo: false)
@@ -207,6 +254,12 @@ class SignupViewController: UIViewController,UIScrollViewDelegate,UITextFieldDel
 
     func uploadImage()
     {
+        //activate activity indicator and disable user interaction
+        dispatch_async(dispatch_get_main_queue()) {
+            self.activityIndicator.startAnimating()
+            UIApplication.sharedApplication().beginIgnoringInteractionEvents()
+        }
+        
         let url = NSURL(string: "http://chudao.herokuapp.com/binary/upload")
         
         let request = NSMutableURLRequest(URL: url!)
@@ -265,6 +318,12 @@ class SignupViewController: UIViewController,UIScrollViewDelegate,UITextFieldDel
             (
             let data, let response, let error) in
             
+            //disable activiy indicator and re-activate user interaction
+            dispatch_async(dispatch_get_main_queue()) {
+                self.activityIndicator.stopAnimating()
+                UIApplication.sharedApplication().endIgnoringInteractionEvents()
+            }
+            
             guard let _:NSData = data, let _:NSURLResponse = response  where error == nil else {
                 print("error: \(error!)")
                 return
@@ -278,9 +337,11 @@ class SignupViewController: UIViewController,UIScrollViewDelegate,UITextFieldDel
                     print("Error reading JSON data")
                     return
                 }
-                if jsonResponse["response-code"]! as! String == "010" {
+                if jsonResponse["response-code"]! as! String == "020" {
                     dispatch_async(dispatch_get_main_queue()) {
                         print("Image uploaded: \(jsonResponse)")
+                        self.performSegueWithIdentifier("signupToHome", sender: self.userId)
+                        
                     }
                 }else{
                     dispatch_async(dispatch_get_main_queue()) {
@@ -307,8 +368,8 @@ class SignupViewController: UIViewController,UIScrollViewDelegate,UITextFieldDel
             let destinationViewController = segue.destinationViewController as! UITabBarController
             let destinationTab = destinationViewController.viewControllers?.first as! HomeViewController
             destinationTab.userId = sender as! Int
-            destinationTab.identity = self.identity
-            destinationTab.authToken = self.authToken
+            destinationTab.identity = identity
+            destinationTab.authToken = authToken
         }
     }
     

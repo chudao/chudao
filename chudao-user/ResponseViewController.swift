@@ -13,6 +13,8 @@ class ResponseViewController: UIViewController, UIScrollViewDelegate, UITableVie
     var userId: Int = -1
     var authToken: String = "undefined"
     var identity: String = "undefined"
+    var username: String = "undefined"
+    var password: String = "undefined"
     var requestDetail: [String:AnyObject] = [:]
     var responseDetail: [String:AnyObject] = [:]
     var productDetail: [[String:AnyObject]] = []
@@ -36,8 +38,6 @@ class ResponseViewController: UIViewController, UIScrollViewDelegate, UITableVie
         scrollView.scrollEnabled = true
         scrollView.sizeToFit()
         scrollView.contentSize = CGSize(width:self.view.frame.width, height:950.0)
-
-
         
         if requestDetail["user-message"] as? String != "" {
             userNote.text = requestDetail["user-message"] as! String
@@ -60,7 +60,9 @@ class ResponseViewController: UIViewController, UIScrollViewDelegate, UITableVie
         }
 
         if responseDetail.count == 0 {
-            fetchResponse(requestDetail["response-id"] as! String)
+            if let responseId = requestDetail["response-id"] as? String {
+                fetchResponse(responseId)
+            }
         }
         
         //activity indicator
@@ -70,7 +72,6 @@ class ResponseViewController: UIViewController, UIScrollViewDelegate, UITableVie
         activityIndicator.hidesWhenStopped = true
         activityIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.Gray
         view.addSubview(activityIndicator)
-        
         
         let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(ProductDetailViewController.imageTapped(_:)))
         userDefaultImage.userInteractionEnabled = true
@@ -87,8 +88,6 @@ class ResponseViewController: UIViewController, UIScrollViewDelegate, UITableVie
         stylistImage.addGestureRecognizer(tapRecognizer)
         requestSpecificImage.clipsToBounds = true
         requestSpecificImage.contentMode = UIViewContentMode.ScaleAspectFit
-        
-        
     }
     
     func imageTapped(sender: UITapGestureRecognizer) {
@@ -351,6 +350,8 @@ class ResponseViewController: UIViewController, UIScrollViewDelegate, UITableVie
             destinationViewController.userId = userId
             destinationViewController.authToken = authToken
             destinationViewController.identity = identity
+            destinationViewController.username = username
+            destinationViewController.password = password
             destinationViewController.productDetail = productDetail
             destinationViewController.requestDetail = requestDetail
             destinationViewController.userDefaultImageAsData = userDefaultImageAsData

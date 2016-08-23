@@ -15,12 +15,16 @@ class NewRequestViewController: UIViewController,UINavigationControllerDelegate,
     var activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView()
     var fileKey: String = ""
     var authToken: String = "undefined"
+    var username: String = "undefined"
+    var password: String = "undefined"
     
     @IBOutlet var cancelButton: UIBarButtonItem!
     @IBAction func cancelRequest(sender: AnyObject) {
         performSegueWithIdentifier("newRequestToHome", sender: userId)
     }
     
+    @IBOutlet var newButton: UIButton!
+    @IBOutlet var exisitingButton: UIButton!
     @IBOutlet var priceLowerBound: UITextField!
     @IBOutlet var priceHigherBound: UITextField!
     @IBOutlet var Requirements: UITextView!
@@ -55,20 +59,20 @@ class NewRequestViewController: UIViewController,UINavigationControllerDelegate,
         let lowerBound: Double? = Double(priceLowerBound.text!)
         let upperBound: Double? = Double(priceHigherBound.text!)
         
-        if lowerBound != nil && upperBound != nil {
-            if lowerBound > upperBound || lowerBound < 0.0 {
+        print("submit button tapped")
+        
+        if lowerBound != nil && upperBound != nil && (lowerBound > upperBound || lowerBound < 0.0) {
                 displayAlert("Invalid price", message: "Please enter a valid range or leave it blank", enterMoreInfo: false)
-            }
         }else if lowerBound != nil && lowerBound < 0.0 {
             displayAlert("Invalid price", message: "Please enter a valid lower bound or leave it blank", enterMoreInfo: false)
         }else if upperBound != nil && upperBound < 0.0 {
             displayAlert("Invalid price", message: "Please enter a valid upper bound or leave it blank", enterMoreInfo: false)
         }else if Requirements.text == "" {
             displayAlert("Description is required", message: "Please describe your requirements", enterMoreInfo: false)
-        }else{
-            dispatch_async(dispatch_get_main_queue()) {
+        }else if attachment.image == nil{
                 self.displayAlert("Complete info will improve your experience", message: "Stylist could better recommend for you if you provide more information.  Do you still want to continue?", enterMoreInfo: true)
-            }
+        }else {
+            self.uploadImage()
         }
     }
     
@@ -76,6 +80,8 @@ class NewRequestViewController: UIViewController,UINavigationControllerDelegate,
         super.viewDidLoad()
         print("NewRequest userid: \(userId)")
         print("NewRequest identity \(identity)")
+        
+        self.navigationController?.navigationBarHidden = true
         
         priceLowerBound.delegate = self
         priceHigherBound.delegate = self
@@ -92,13 +98,36 @@ class NewRequestViewController: UIViewController,UINavigationControllerDelegate,
         activityIndicator.hidesWhenStopped = true
         activityIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.Gray
         view.addSubview(activityIndicator)
+        
+        Requirements.layer.cornerRadius = 8.0
+        Requirements.layer.masksToBounds = true
+        Requirements.layer.borderColor = UIColor( red: 128/255, green: 128/255, blue:128/255, alpha: 1.0 ).CGColor
+        Requirements.layer.borderWidth = 1.0
+        
+        priceHigherBound.layer.cornerRadius = 8.0
+        priceHigherBound.layer.masksToBounds = true
+        priceHigherBound.layer.borderColor = UIColor( red: 128/255, green: 128/255, blue:128/255, alpha: 1.0 ).CGColor
+        priceHigherBound.layer.borderWidth = 1.0
+        
+        priceLowerBound.layer.cornerRadius = 8.0
+        priceLowerBound.layer.masksToBounds = true
+        priceLowerBound.layer.borderColor = UIColor( red: 128/255, green: 128/255, blue:128/255, alpha: 1.0 ).CGColor
+        priceLowerBound.layer.borderWidth = 1.0
+        
+        exisitingButton.layer.cornerRadius = 8.0
+        exisitingButton.layer.masksToBounds = true
+        exisitingButton.layer.borderColor = UIColor( red: 128/255, green: 128/255, blue:128/255, alpha: 1.0 ).CGColor
+        exisitingButton.layer.borderWidth = 1.0
+        
+        newButton.layer.cornerRadius = 8.0
+        newButton.layer.masksToBounds = true
+        newButton.layer.borderColor = UIColor( red: 128/255, green: 128/255, blue:128/255, alpha: 1.0 ).CGColor
+        newButton.layer.borderWidth = 1.0
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
-    
 
     //dismiss keyboard by clicking anywhere else
     func dismissKeyboard() {
@@ -120,7 +149,7 @@ class NewRequestViewController: UIViewController,UINavigationControllerDelegate,
         if enterMoreInfo == true {
             title = "Cancel"
             alert.addAction(UIAlertAction(title: "Continue", style: UIAlertActionStyle.Default, handler: { (action) in
-                self.uploadImage()
+                    self.submit()
             }))
         }
         alert.addAction(UIAlertAction(title: title, style: UIAlertActionStyle.Default, handler: nil))
@@ -140,7 +169,6 @@ class NewRequestViewController: UIViewController,UINavigationControllerDelegate,
     }
     
     func submit() {
-        
         //activate activity indicator and disable user interaction
         activityIndicator.startAnimating()
         UIApplication.sharedApplication().beginIgnoringInteractionEvents()
@@ -317,6 +345,8 @@ class NewRequestViewController: UIViewController,UINavigationControllerDelegate,
             destinationTab.userId = sender as! Int
             destinationTab.identity = identity
             destinationTab.authToken = authToken
+            destinationTab.username = username
+            destinationTab.password = password
         }
     }
 

@@ -13,6 +13,8 @@ class HomeViewController: UIViewController,UITextFieldDelegate, UISearchBarDeleg
     var userId: Int = -1
     var identity: String = "undefined"
     var authToken: String = "undefined"
+    var username: String = "undefined"
+    var password: String = "undefined"
     var sharedUserInfo = SharedUserInfo()
 
     
@@ -41,6 +43,8 @@ class HomeViewController: UIViewController,UITextFieldDelegate, UISearchBarDeleg
             sharedUserInfo.userId = userId
             sharedUserInfo.identity = identity
             sharedUserInfo.authToken = authToken
+            sharedUserInfo.username = username
+            sharedUserInfo.password = password
         }
         
         
@@ -57,7 +61,6 @@ class HomeViewController: UIViewController,UITextFieldDelegate, UISearchBarDeleg
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     //dismiss keyboard by clicking anywhere else
@@ -91,16 +94,20 @@ class HomeViewController: UIViewController,UITextFieldDelegate, UISearchBarDeleg
         if segue.identifier == "homeToNewRequest" {
             let destinationViewController = segue.destinationViewController as! NewRequestViewController
             destinationViewController.userId = sender as! Int
-            destinationViewController.authToken = self.authToken
-            destinationViewController.identity = self.identity
+            destinationViewController.authToken = authToken
+            destinationViewController.identity = identity
+            destinationViewController.username = username
+            destinationViewController.password = password
         }
         if segue.identifier == "homeToSearchResult"{
             let destinationViewController = segue.destinationViewController as! UINavigationController
             let productSearchReultController = destinationViewController.topViewController as! ProductSearchResultTableViewController
             productSearchReultController.userId = Int(sender![0] as! String)!
             productSearchReultController.searchRequirement = sender![1] as! String
-            productSearchReultController.authToken = self.authToken
-            productSearchReultController.identity = self.identity
+            productSearchReultController.authToken = authToken
+            productSearchReultController.identity = identity
+            productSearchReultController.username = username
+            productSearchReultController.password = password
         }
     }
 

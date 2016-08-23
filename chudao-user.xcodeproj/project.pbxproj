@@ -17,8 +17,6 @@
 		E5C7A92C1D141EF00019008A /* chudao.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E5C7A92A1D141EF00019008A /* chudao.xcdatamodeld */; };
 		E5C7A92E1D141EF00019008A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E5C7A92D1D141EF00019008A /* Assets.xcassets */; };
 		E5C7A9311D141EF00019008A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E5C7A92F1D141EF00019008A /* LaunchScreen.storyboard */; };
-		E5C7A93C1D141EF00019008A /* chudaoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5C7A93B1D141EF00019008A /* chudaoTests.swift */; };
-		E5C7A9471D141EF00019008A /* chudaoUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5C7A9461D141EF00019008A /* chudaoUITests.swift */; };
 		E5C7A9551D1512D50019008A /* SignupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5C7A9541D1512D50019008A /* SignupViewController.swift */; };
 		E5EAFA201D2E53E500846978 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5EAFA1F1D2E53E500846978 /* HomeViewController.swift */; };
 		E5EAFA221D2E54D100846978 /* NewRequestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5EAFA211D2E54D100846978 /* NewRequestViewController.swift */; };
@@ -61,11 +59,7 @@
 		E5C7A9301D141EF00019008A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		E5C7A9321D141EF00019008A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E5C7A9371D141EF00019008A /* chudaoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = chudaoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		E5C7A93B1D141EF00019008A /* chudaoTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = chudaoTests.swift; sourceTree = "<group>"; };
-		E5C7A93D1D141EF00019008A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E5C7A9421D141EF00019008A /* chudaoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = chudaoUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		E5C7A9461D141EF00019008A /* chudaoUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = chudaoUITests.swift; sourceTree = "<group>"; };
-		E5C7A9481D141EF00019008A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E5C7A9541D1512D50019008A /* SignupViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignupViewController.swift; sourceTree = "<group>"; };
 		E5EAFA1F1D2E53E500846978 /* HomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		E5EAFA211D2E54D100846978 /* NewRequestViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewRequestViewController.swift; sourceTree = "<group>"; };
@@ -106,8 +100,6 @@
 			isa = PBXGroup;
 			children = (
 				E5C7A9221D141EF00019008A /* chudao-user */,
-				E5C7A93A1D141EF00019008A /* chudaoTests */,
-				E5C7A9451D141EF00019008A /* chudaoUITests */,
 				E5C7A9211D141EF00019008A /* Products */,
 			);
 			sourceTree = "<group>";
@@ -147,24 +139,6 @@
 				E5C7A92A1D141EF00019008A /* chudao.xcdatamodeld */,
 			);
 			path = "chudao-user";
-			sourceTree = "<group>";
-		};
-		E5C7A93A1D141EF00019008A /* chudaoTests */ = {
-			isa = PBXGroup;
-			children = (
-				E5C7A93B1D141EF00019008A /* chudaoTests.swift */,
-				E5C7A93D1D141EF00019008A /* Info.plist */,
-			);
-			path = chudaoTests;
-			sourceTree = "<group>";
-		};
-		E5C7A9451D141EF00019008A /* chudaoUITests */ = {
-			isa = PBXGroup;
-			children = (
-				E5C7A9461D141EF00019008A /* chudaoUITests.swift */,
-				E5C7A9481D141EF00019008A /* Info.plist */,
-			);
-			path = chudaoUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -324,7 +298,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E5C7A93C1D141EF00019008A /* chudaoTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -332,7 +305,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E5C7A9471D141EF00019008A /* chudaoUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

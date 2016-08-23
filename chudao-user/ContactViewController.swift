@@ -13,6 +13,8 @@ class ContactViewController: UIViewController {
     var userId: Int = -1
     var authToken: String = "undefined"
     var identity:String = "undefined"
+    var username: String = "undefined"
+    var password:String = "undefined"
 
     @IBAction func done(sender: AnyObject) {
         performSegueWithIdentifier("contactToHome", sender: self)
@@ -36,6 +38,8 @@ class ContactViewController: UIViewController {
             sharedUserInfo.userId = userId
             sharedUserInfo.identity = identity
             sharedUserInfo.authToken = authToken
+            sharedUserInfo.username = username
+            sharedUserInfo.password = password
             destinationViewController.switchTo = "2"
         }
     }

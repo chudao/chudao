@@ -18,6 +18,8 @@ class ProductDetailViewController: UIViewController {
     var productLink: String = ""
     var productDescription: String = ""
     var authToken: String = "undefined"
+    var username: String = "undefined"
+    var password: String = "undefined"
     var activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView()
     var imageAsNSData: NSData = NSData()
     var responseDetail: [String:AnyObject] = [:]
@@ -40,6 +42,11 @@ class ProductDetailViewController: UIViewController {
         name.text = productName
         productImage.clipsToBounds = true
         productImage.contentMode = UIViewContentMode.ScaleAspectFill
+        
+        purchaseButton.layer.cornerRadius = 8.0
+        purchaseButton.layer.masksToBounds = true
+        purchaseButton.layer.borderColor = UIColor( red: 128/255, green: 128/255, blue:128/255, alpha: 1.0 ).CGColor
+        purchaseButton.layer.borderWidth = 1.0
 
         //activity indicator
         activityIndicator = UIActivityIndicatorView(frame: self.view.bounds)
@@ -222,6 +229,8 @@ class ProductDetailViewController: UIViewController {
             destinationViewController.userId = sender as! Int
             destinationViewController.authToken = authToken
             destinationViewController.identity = identity
+            destinationViewController.username = username
+            destinationViewController.password = password
         }
     }
 }

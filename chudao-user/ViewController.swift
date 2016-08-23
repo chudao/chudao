@@ -14,6 +14,8 @@ class ViewController: UIViewController,UITextFieldDelegate {
     var identity: String = "undefined"
     var authToken: String = "undefined"
     
+    @IBOutlet var switchToSignUp: UIButton!
+    @IBOutlet var login: UIButton!
     @IBOutlet var username: UITextField!
     @IBOutlet var password: UITextField!
     @IBAction func loginButton(sender: AnyObject) {
@@ -29,6 +31,26 @@ class ViewController: UIViewController,UITextFieldDelegate {
         super.viewDidLoad()
         username.delegate=self
         password.delegate=self
+        username.backgroundColor = UIColor .clearColor()
+        password.backgroundColor = UIColor .clearColor()
+        
+        username.layer.cornerRadius = 8.0
+        username.layer.masksToBounds = true
+        username.layer.borderColor = UIColor( red: 128/255, green: 128/255, blue:128/255, alpha: 1.0 ).CGColor
+        username.layer.borderWidth = 1.0
+        
+        password.layer.cornerRadius = 8.0
+        password.layer.masksToBounds = true
+        password.layer.borderColor = UIColor( red: 128/255, green: 128/255, blue:128/255, alpha: 1.0 ).CGColor
+        password.layer.borderWidth = 1.0
+        
+        login.layer.cornerRadius = 8.0
+        login.layer.masksToBounds = true
+        login.layer.borderColor = UIColor( red: 128/255, green: 128/255, blue:128/255, alpha: 1.0 ).CGColor
+        login.layer.borderWidth = 1.0
+        
+        login.setTitleColor(UIColor.blackColor(), forState: .Normal)
+        switchToSignUp.setTitleColor(UIColor.blackColor(), forState: .Normal)
         
         //gesture to dismiss keyboard
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ViewController.dismissKeyboard))
@@ -45,7 +67,6 @@ class ViewController: UIViewController,UITextFieldDelegate {
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     //dismiss keyboard by clicking anywhere else
@@ -124,7 +145,7 @@ class ViewController: UIViewController,UITextFieldDelegate {
                 if jsonResponse["response-code"]! as! String == "000" {
                     dispatch_async(dispatch_get_main_queue()) {
                         self.authToken = ((response as? NSHTTPURLResponse)?.allHeaderFields["X-Auth-Token"] as? String)!
-                        print("Tokne \(self.authToken)")
+                        print("Token \(self.authToken)")
                         let userId = jsonResponse["user-id"]! as! Int
                         self.identity = jsonResponse["user-category"] as! String
                         self.performSegueWithIdentifier("loginToHome", sender: userId)
@@ -147,8 +168,10 @@ class ViewController: UIViewController,UITextFieldDelegate {
             let destinationViewController = segue.destinationViewController as! UITabBarController
             let destinationTab = destinationViewController.viewControllers?.first as! HomeViewController
             destinationTab.userId = sender as! Int
-            destinationTab.identity = self.identity
-            destinationTab.authToken = self.authToken
+            destinationTab.identity = identity
+            destinationTab.authToken = authToken
+            destinationTab.username = username.text!
+            destinationTab.password = password.text!
         }
     }
 }

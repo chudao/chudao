@@ -31,14 +31,41 @@ class SuggestProductViewController: UIViewController, UITextFieldDelegate, UITex
     @IBOutlet var purchaseLink: UITextField!
     @IBOutlet var productDescription: UITextView!
     @IBOutlet var tags: UITextField!
+    @IBOutlet var submitButton: UIButton!
     
     var userId: Int = -1
     var authToken: String = "undefined"
     var identity:String = "undefined"
+    var username: String = "undefined"
+    var password:String = "undefined"
     var activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        productName.layer.cornerRadius = 6.0
+        productName.layer.masksToBounds = true
+        productName.layer.borderColor = UIColor( red: 128/255, green: 128/255, blue:128/255, alpha: 1.0 ).CGColor
+        productName.layer.borderWidth = 0.5
+        
+        brand.layer.cornerRadius = 6.0
+        brand.layer.masksToBounds = true
+        brand.layer.borderColor = UIColor( red: 128/255, green: 128/255, blue:128/255, alpha: 1.0 ).CGColor
+        brand.layer.borderWidth = 0.5
+        
+        purchaseLink.layer.cornerRadius = 6.0
+        purchaseLink.layer.masksToBounds = true
+        purchaseLink.layer.borderColor = UIColor( red: 128/255, green: 128/255, blue:128/255, alpha: 1.0 ).CGColor
+        purchaseLink.layer.borderWidth = 0.5
+        
+        productDescription.layer.cornerRadius = 6.0
+        productDescription.layer.masksToBounds = true
+        productDescription.layer.borderColor = UIColor( red: 128/255, green: 128/255, blue:128/255, alpha: 1.0 ).CGColor
+        productDescription.layer.borderWidth = 0.5
+        
+        submitButton.layer.masksToBounds = true
+        submitButton.layer.borderColor = UIColor( red: 128/255, green: 128/255, blue:128/255, alpha: 1.0 ).CGColor
+        submitButton.layer.borderWidth = 1.0
         
         print("Suggestpage serid: \(userId)")
         print("Suggestpage identity: \(identity)")
@@ -90,7 +117,7 @@ class SuggestProductViewController: UIViewController, UITextFieldDelegate, UITex
         let postEndpoint: String = "http://chudao.herokuapp.com/product/add"
         let url = NSURL(string: postEndpoint)!
         let session = NSURLSession.sharedSession()
-        let postParams : [String: String] = ["product-name":productName.text!,"product-description":productDescription.text!,"product-brand":brand.text!,"product-tags": tags.text!]
+        let postParams : [String: String] = ["product-name":productName.text!,"product-description":productDescription.text!,"product-brand":brand.text!,"product-tags": "undefined"]
         
         // Create the request
         let request = NSMutableURLRequest(URL: url)
@@ -151,6 +178,8 @@ class SuggestProductViewController: UIViewController, UITextFieldDelegate, UITex
             sharedUserInfo.userId = userId
             sharedUserInfo.identity = identity
             sharedUserInfo.authToken = authToken
+            sharedUserInfo.username = username
+            sharedUserInfo.password = password
             destinationViewController.switchTo = "2"
         }
     }

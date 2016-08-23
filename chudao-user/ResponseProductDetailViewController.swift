@@ -13,6 +13,8 @@ class ResponseProductDetailViewController: UIViewController {
     var userId: Int = -1
     var authToken: String = "undefined"
     var identity: String = "undefined"
+    var username: String = "undefined"
+    var password: String = "undefined"
     var productDetail: [[String:AnyObject]] = []
     var requestDetail: [String:AnyObject] = [:]
     var responseDetail: [String:AnyObject] = [:]
@@ -26,6 +28,8 @@ class ResponseProductDetailViewController: UIViewController {
     @IBOutlet var productBrand: UILabel!
     @IBOutlet var productName: UILabel!
     @IBOutlet var productDescription: UILabel!
+    @IBOutlet var purchaseButton: UIButton!
+    @IBOutlet var doneButton: UIButton!
     @IBAction func done(sender: AnyObject) {
         performSegueWithIdentifier("productDetailToResponse", sender: self)
     }
@@ -37,6 +41,16 @@ class ResponseProductDetailViewController: UIViewController {
         
         print("ResponseProductDetailpage userid: \(userId)")
         print("NeResponseProductDetailpagewRequest identity \(identity)")
+        
+        doneButton.layer.cornerRadius = 8.0
+        doneButton.layer.masksToBounds = true
+        doneButton.layer.borderColor = UIColor( red: 128/255, green: 128/255, blue:128/255, alpha: 1.0 ).CGColor
+        doneButton.layer.borderWidth = 1.0
+        
+        purchaseButton.layer.cornerRadius = 8.0
+        purchaseButton.layer.masksToBounds = true
+        purchaseButton.layer.borderColor = UIColor( red: 128/255, green: 128/255, blue:128/255, alpha: 1.0 ).CGColor
+        purchaseButton.layer.borderWidth = 1.0
         
         //activity indicator
         activityIndicator = UIActivityIndicatorView(frame: self.view.bounds)
@@ -221,6 +235,8 @@ class ResponseProductDetailViewController: UIViewController {
             destinationViewController.userId = userId
             destinationViewController.authToken = authToken
             destinationViewController.identity = identity
+            destinationViewController.username = username
+            destinationViewController.password = password
             destinationViewController.productDetail = productDetail
             destinationViewController.requestDetail = requestDetail
             destinationViewController.userDefaultImageAsData = userDefaultImageAsData

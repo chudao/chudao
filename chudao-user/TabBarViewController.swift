@@ -16,6 +16,18 @@ class TabBarViewController: UITabBarController {
         super.viewDidLoad()
         self.navigationController?.navigationBarHidden = true
         
+        //set tab bar item selected images
+        let tabBar = self.tabBar
+        
+        let homeSelectImage: UIImage! = UIImage(named: "homeTabSelected")?.imageWithRenderingMode(.AlwaysOriginal)
+        let accountSelectImage: UIImage! = UIImage(named: "accountTabSelected")?.imageWithRenderingMode(.AlwaysOriginal)
+        let requestSelectImage: UIImage! = UIImage(named: "requestTabSelected")?.imageWithRenderingMode(.AlwaysOriginal)
+        
+        tabBar.items![0].selectedImage = homeSelectImage
+        tabBar.items![1].selectedImage = accountSelectImage
+        tabBar.items![2].selectedImage = requestSelectImage
+        
+        tabBar.tintColor = UIColor.blackColor()
     }
     
     override func viewWillAppear(animated: Bool) {
